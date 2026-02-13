@@ -82,14 +82,5 @@ These actions are performed directly from the Main Interface [A] using timed but
 ---
 
 ## 🚀 Future Roadmap
-
-I am actively working on extending the capabilities of this thermostat. The following features are currently under development:
-
 - 📱 **Mobile Application:** A dedicated app for Android/iOS to control the thermostat remotely via Bluetooth (BLE). This will allow for easy program editing and manual overrides without using the physical buttons.  
-
-- 🌐 **Cloud Integration & Server:** Development of a backend server to log temperature and humidity data.  
-
-- 📊 **Real-Time Dashboard:** A web-based interface to view live telemetry, heating history, and system status from anywhere in the world.  
-
-- 🔔 **Smart Notifications:** Get alerts on your phone if the temperature drops below a certain threshold or if the heating unit stays on for too long.
 
