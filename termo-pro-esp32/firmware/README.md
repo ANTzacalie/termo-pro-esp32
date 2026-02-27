@@ -1,30 +1,90 @@
-Software Setup:
--I used Arduino IDE v2, but the code is compatible with other environments as long as you have the following libraries installed: 
+# Firmware Guide
 
--Adafruit Unified Sensor (v1.1.15) by Adafruit. 
--DHT Sensor Library (v1.4.6) by Adafruit.
--LiquidCrystal (Standard library for 4-bit/8-bit mode).
+## Software Setup
 
-***Very important, get the mac address from both of your ESP32s!!!***
-How to get it?
--Using this command on an empty sketch: 
+Development was done using Arduino IDE v2.
 
-setup() {
+The project is compatible with other development environments, provided the required libraries are installed.
 
+Required libraries:
+
+- Adafruit Unified Sensor (v1.1.15) – by Adafruit  
+- DHT Sensor Library (v1.4.6) – by Adafruit  
+- LiquidCrystal (standard Arduino library for 4-bit / 8-bit mode)
+
+Install all libraries before compiling the firmware.
+
+---
+
+# MAC Address Configuration (Required)
+
+Both ESP32 boards must have their MAC addresses configured inside the firmware.
+
+You must retrieve the MAC address from each board and place it in the corresponding file.
+
+## How to Retrieve the MAC Address
+
+Upload the following minimal sketch to each ESP32:
+
+```cpp
+#include <WiFi.h>
+
+void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
-  delay(100); 
-  
-  Serial.print("ESP32 Board MAC Address:  ");
-  Serial.println(WiFi.macAddress());
+  delay(100);
 
+  Serial.print("ESP32 Board MAC Address: ");
+  Serial.println(WiFi.macAddress());
 }
 
--It will get you the mac address in the serial monitor. Copy both and place them at the specified locations below , you will find an array named receiverMAC:
--termostat esp32 mac -> startingModule.ino;
--startingModule esp32 mac -> termostat.ino;
+void loop() {}
+```
 
--termostat.ino dependencies(both of below need to be in the same folder): 
-    - termostat.h;
-    - termostat_variables.h;
--starting-module.ino has no external dependencies;
+Open the Serial Monitor (115200 baud).  
+The board’s MAC address will be displayed.
+
+Repeat this process for both ESP32 boards.
+
+---
+
+# Where to Place the MAC Addresses
+
+Locate the array named:
+
+receiverMAC
+
+Then configure as follows:
+
+- Thermostat ESP32 MAC → place inside `startingModule.ino`
+- Starting Module ESP32 MAC → place inside `termostat.ino`
+
+Each board must contain the MAC address of the other board.
+
+Incorrect MAC configuration will prevent communication between modules.
+
+---
+
+# File Structure and Dependencies
+
+## termostat.ino
+
+The following files must be located in the same folder:
+
+- termostat.h  
+- termostat_variables.h  
+
+If these files are missing or placed elsewhere, compilation will fail.
+
+## startingModule.ino
+
+This file has no external dependencies and can compile independently.
+
+---
+
+# Important Notes
+
+- Ensure both ESP32 boards are flashed with the correct firmware.
+- Verify that the correct board type is selected in Arduino IDE.
+- Confirm that WiFi mode is properly initialized before communication.
+- Always double-check MAC address placement before testing communication.
