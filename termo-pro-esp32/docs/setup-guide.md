@@ -1,40 +1,133 @@
-Hardware Assembly:
+# Setup Guide
 
--The prototype was built using two T830 breadboards. 
--To set up this thermostat, follow the electrical schematic provided in the .pdf or KiCad files.
--I recommend using large breadboards for an easier setup or designing a PCB based on the schematics to solder the components permanently.
--Relay connection to heating boiler is done via the NO-COM to NO-COM or TA/TA.
+## 1. Overview
 
-GPIO Pins used for thermostat esp32:
+This document describes the hardware setup and GPIO configuration for:
 
--DHT11 Sensor,23 
--LCD Display," 4, 5, 16, 17, 18, 19 "
--LCD Brightness (PWM), 12
--Buttons,"32, 33"
--Photoresistor (LDR), 34
+- Starting Module (Ignition Control)
+- Intelligent Thermostat Module
 
-GPIO Pins for starting-module esp32:
+All testing was performed using the ESP32-WROOM-32 DevKit.
 
--Relay,17 - > Relay is done fully as in the scheme, but the 2 leds are connected into the relay board, so only pin 17 is used , if done manually you will require two more pins for the LEDs.
+---
 
-*Obs:
+# Hardware Assembly
 
-***-All this is done on esp32-wroom-32 devkit, diffrent versions of esp32 have other specs for pins, be careful how you wire the connections!***
-***-Max pin current is I = 12mA.***
+The prototype was assembled using two T830 breadboards.
 
+Follow the electrical schematic provided in the PDF or KiCad project files for exact wiring.
 
-////////////////////////////////////////////////////////////////////////////
+For easier assembly:
+- Use large breadboards for better routing.
+- Keep power and signal lines separated where possible.
+- Keep relay wiring isolated from low-voltage logic wiring.
 
-*Obs(if not using pre-made relay modules):
+For a permanent installation, design and manufacture a PCB based on the schematic and solder all components.
 
--For the startingModule, the 2 LED on the electrical scheme are not added in code in file startingModule.ino, you will need to manually add the pin numbers and other required code, comments are provided in code for easy setup ;).
+---
 
--Pre-made relay uses an PNP/NPN transistor, that means its high-side for PNP and low-side for NPN. I used an NPN transistor for switching because the pin only supplies 3.3V not 5V that an PNP needs, some relays also support 3.3V to open, but not reliable.
+# Boiler Connection
 
--Pin current needs to be at least 2-3mA for the transistor base to open and turn the relay coil on.
--Used 1kOhm resistor, but 470/330 works too!
--Rectifier diode 1N4007 can be replaced with 1N4001 / 1N4148.
-    
-***If using an high-side relay module, do change the 3 lines of code inside startingModule.ino, just reverse them , HIGH at boot, LOW on start and HIGH on stop.***
+The relay connects to the heating boiler using:
 
-***Obs: On the thermostat.pdf/sch you will see a component U3, that is an MB-V2 breadboard power module(it has both 5V and 3.3V).***
+- NO–COM terminals  
+  or  
+- TA/TA terminals (depending on boiler labeling)
+
+Ensure the boiler control circuit is voltage-free (dry contact) before connecting.
+
+---
+
+# Thermostat Module – GPIO Configuration
+
+The thermostat ESP32 uses the following pins:
+
+DHT11 (Temperature & Humidity Sensor)  
+GPIO 23  
+
+LCD Display (Parallel Interface)  
+GPIO 4  
+GPIO 5  
+GPIO 16  
+GPIO 17  
+GPIO 18  
+GPIO 19  
+
+LCD Backlight Brightness (PWM)  
+GPIO 12  
+
+Push Buttons  
+GPIO 32  
+GPIO 33  
+
+Photoresistor (LDR – Analog Input)  
+GPIO 34  
+
+---
+
+# Starting Module – GPIO Configuration
+
+Relay Control  
+GPIO 17  
+
+If using a pre-made relay module:
+- Only GPIO 17 is required.
+- Status LEDs are already integrated on the module.
+
+If building the relay driver manually:
+- Two additional GPIO pins are required for LED indicators.
+- LEDs must also be defined in the firmware.
+
+---
+
+# Electrical Considerations
+
+Maximum recommended GPIO current:  
+12 mA per pin  
+
+Ensure:
+- Proper base resistor sizing for transistor switching.
+- Common ground between ESP32 and relay driver circuit.
+- Flyback diode across relay coil.
+
+---
+
+# Manual Relay Driver Notes (Without Pre-Made Module)
+
+The startingModule.ino file does not include control logic for the two schematic LEDs.  
+If using the discrete version, manually define the LED pins and add control logic. Comments are already included in the code for guidance.
+
+Relay switching configuration:
+
+- NPN transistor used (low-side switching)
+- ESP32 logic level: 3.3 V
+
+Reason:
+Most PNP high-side relay modules require 5 V logic for reliable operation.  
+Using an NPN transistor ensures proper switching with 3.3 V control signals.
+
+Recommended base current:  
+2–3 mA minimum to ensure transistor saturation.
+
+Base resistor values tested:
+- 1 kΩ (used)
+- 470 Ω (acceptable)
+- 330 Ω (acceptable)
+
+Flyback diode:
+- 1N4007 (used)
+- 1N4001 (compatible)
+- 1N4148 (acceptable for small relay coils)
+
+---
+
+# Important Warning
+
+Different ESP32 variants may have different GPIO capabilities and restrictions.
+
+Before wiring:
+- Verify which pins support PWM.
+- Verify which pins support ADC.
+- Avoid strapping pins unless properly understood.
+
+Incorrect wiring may permanently damage the microcontroller.
