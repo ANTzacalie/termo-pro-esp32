@@ -16,6 +16,7 @@ All testing was performed using the ESP32-WROOM-32 DevKit.
 The prototype was assembled using two T830 breadboards.
 
 Follow the electrical schematic provided in the PDF or KiCad project files for exact wiring.
+On the  electrical schematics there is an symbol marked U3, it represents the MB-V2 Breadboard power supply, you can use any other power supply, but make sure it can output at least 600mA !
 
 For easier assembly:
 - Use large breadboards for better routing.
@@ -42,33 +43,29 @@ Ensure the boiler control circuit is voltage-free (dry contact) before connectin
 
 The thermostat ESP32 uses the following pins:
 
-DHT11 (Temperature & Humidity Sensor)  
-GPIO 23  
+DHT11 (Temperature & Humidity Sensor): GPIO 23  
 
-LCD Display (Parallel Interface)  
-GPIO 4  
-GPIO 5  
+LCD Display (Parallel Interface):
+GPIO 4 
+GPIO 5 
 GPIO 16  
 GPIO 17  
 GPIO 18  
 GPIO 19  
 
-LCD Backlight Brightness (PWM)  
-GPIO 12  
+LCD Backlight Brightness (PWM): GPIO 12  
 
-Push Buttons  
+Push Buttons:
 GPIO 32  
 GPIO 33  
 
-Photoresistor (LDR – Analog Input)  
-GPIO 34  
+Photoresistor (LDR – Analog Input): GPIO 34  
 
 ---
 
 # Starting Module – GPIO Configuration
 
-Relay Control  
-GPIO 17  
+Relay Control: GPIO 17  
 
 If using a pre-made relay module:
 - Only GPIO 17 is required.
@@ -130,4 +127,6 @@ Before wiring:
 - Verify which pins support ADC.
 - Avoid strapping pins unless properly understood.
 
-Incorrect wiring may permanently damage the microcontroller.
+# *** WARNING ***
+- Incorrect wiring may permanently damage the microcontroller.
+- It is recomanded to ansamble step by step and test each one.
