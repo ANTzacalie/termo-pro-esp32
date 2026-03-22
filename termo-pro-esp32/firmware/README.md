@@ -82,6 +82,9 @@ This file has no external dependencies and can compile independently.
 
 ---
 
+# Flashing
+- After all steps above you can start to flash the .ino and .h on the esp32's, be careful to flash on the corect ones!
+
 # Important Notes
 
 - Ensure both ESP32 boards are flashed with the correct firmware.
