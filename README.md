@@ -13,7 +13,7 @@
 
 A fully functional, smart thermostat built on the ESP32 platform using the ESP_NOW protocol for wireless communication. This unit features 6 programmable modes, a persistent flash-memory system, and an automated brightness control system.
 
-## 🚀 Features
+## 💎 Features
 
 - **Protocol:** ESP-NOW for fast, low-power communication with heating units.  
 - **Storage:** All programs and settings are stored in Flash memory (NVS) to prevent data loss during power outages.  
