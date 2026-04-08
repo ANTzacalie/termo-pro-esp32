@@ -1,4 +1,4 @@
-# ESP32 Smart Thermostat
+# ESP32 Smart Thermostat (V1)
 
 <p align="center">
 <img src="https://img.shields.io/badge/code-C%2B%2B-00599C?logo=c%2B%2B&logoColor=white">
