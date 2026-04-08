@@ -1,4 +1,15 @@
-# ESP32 Smart Thermostat (ESP-NOW)
+# ESP32 Smart Thermostat
+
+<p align="center">
+<img src="https://img.shields.io/badge/code-C%2B%2B-00599C?logo=c%2B%2B&logoColor=white">
+<img src="https://img.shields.io/badge/board-ESP32-E7352C?logo=espressif&logoColor=white">
+<img src="https://img.shields.io/badge/communication-ESP--NOW-yellow">
+<img src="https://img.shields.io/badge/PCB-KiCad-314CB0?logo=kicad&logoColor=white">
+<img src="https://img.shields.io/badge/IDE-Arduino-00979D?logo=arduino&logoColor=white">
+<img src="https://img.shields.io/badge/domain-IoT-ff6f00">
+<img src="https://img.shields.io/badge/hardware-Sensors%20%26%20Electronics-6a1b9a">
+</p>
+
 
 A fully functional, smart thermostat built on the ESP32 platform using the ESP_NOW protocol for wireless communication. This unit features 6 programmable modes, a persistent flash-memory system, and an automated brightness control system.
 
