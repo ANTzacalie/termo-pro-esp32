@@ -1,0 +1,6 @@
+IMPROVED CONTROL:
+
+    - 2 butoane noi adaugate;
+    - Putem reface controlul pentru a fi mult mai usor;
+
+------- Cam atat ca si modificare in cod -------
