@@ -1,4 +1,4 @@
-# ESP32 Smart Thermostat
+# ESP32 Smart Thermostat (V1)
 
 <p align="center">
 <img src="https://img.shields.io/badge/code-C%2B%2B-00599C?logo=c%2B%2B&logoColor=white">
@@ -92,7 +92,7 @@ These actions are performed directly from the Main Interface [A] using timed but
 
 ---
 
-## 🚀 Future Roadmap
+## 🚀 Future Roadmap - V2 ;)
 - An PCB and 3D printed case.
 - 📱 **Mobile Application:** A dedicated app for Android to control the thermostat remotely via Bluetooth (BLE). This will allow for easy program editing and manual overrides without using the physical buttons.  
 
