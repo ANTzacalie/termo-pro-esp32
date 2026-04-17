@@ -93,6 +93,6 @@ These actions are performed directly from the Main Interface [A] using timed but
 ---
 
 ## 🚀 Future Roadmap - V2 ;)
-- An PCB and 3D printed case.
+- An PCB and 3D printed case, also improved functionalities and better starting module microcontroller.
 - 📱 **Mobile Application:** A dedicated app for Android to control the thermostat remotely via Bluetooth (BLE). This will allow for easy program editing and manual overrides without using the physical buttons.  
 
