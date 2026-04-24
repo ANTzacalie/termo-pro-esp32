@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/code-C%2B%2B-00599C?logo=c%2B%2B&logoColor=white">
 <img src="https://img.shields.io/badge/board-ESP32-E7352C?logo=espressif&logoColor=white">
 <img src="https://img.shields.io/badge/communication-ESP--NOW-yellow">
-<img src="https://img.shields.io/badge/PCB-KiCad-314CB0?logo=kicad&logoColor=white">
+<img src="https://img.shields.io/badge/CAD-KiCad-314CB0?logo=kicad&logoColor=white">
 <img src="https://img.shields.io/badge/IDE-Arduino-00979D?logo=arduino&logoColor=white">
 <img src="https://img.shields.io/badge/domain-IoT-ff6f00">
 <img src="https://img.shields.io/badge/hardware-Sensors%20%26%20Electronics-6a1b9a">
