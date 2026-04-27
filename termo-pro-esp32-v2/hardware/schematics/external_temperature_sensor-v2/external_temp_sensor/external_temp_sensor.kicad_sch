@@ -283,8 +283,8 @@
 		(start 27.94 85.09)
 		(end 105.41 123.19)
 		(stroke
-			(width 0)
-			(type solid)
+			(width 0.254)
+			(type dash)
 			(color 0 255 0 1)
 		)
 		(fill
@@ -344,7 +344,7 @@
 		)
 		(uuid "a90b9a51-69c5-449e-80e8-4e80c9e13869")
 	)
-	(text "Size: L = , W = , h = . "
+	(text "Size: L = , W = , H = . "
 		(exclude_from_sim no)
 		(at 69.85 73.914 0)
 		(effects

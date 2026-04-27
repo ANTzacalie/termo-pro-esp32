@@ -15,26 +15,24 @@
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J1"
-				(at -1.27 -2.5401 0)
+			(property "Reference" "J"
+				(at 0 10.16 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify right)
 				)
 			)
 			(property "Value" "Conn_01x08_Pin"
-				(at -1.27 -0.0001 0)
+				(at 0 -12.7 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify right)
 				)
 			)
 			(property "Footprint" ""
@@ -104,8 +102,8 @@
 			)
 			(symbol "Conn_01x08_Pin_1_1"
 				(rectangle
-					(start 0 7.747)
-					(end 0.8636 7.493)
+					(start 0.8636 7.747)
+					(end 0 7.493)
 					(stroke
 						(width 0.1524)
 						(type default)
@@ -287,10 +285,10 @@
 						(type none)
 					)
 				)
-				(pin no_connect line
+				(pin passive line
 					(at 5.08 7.62 180)
 					(length 3.81)
-					(name "CC2"
+					(name "Pin_1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -305,10 +303,10 @@
 						)
 					)
 				)
-				(pin no_connect line
+				(pin passive line
 					(at 5.08 5.08 180)
 					(length 3.81)
-					(name "SBU1"
+					(name "Pin_2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -323,10 +321,10 @@
 						)
 					)
 				)
-				(pin no_connect line
+				(pin passive line
 					(at 5.08 2.54 180)
 					(length 3.81)
-					(name "D+"
+					(name "Pin_3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -341,10 +339,10 @@
 						)
 					)
 				)
-				(pin no_connect line
+				(pin passive line
 					(at 5.08 0 180)
 					(length 3.81)
-					(name "D-"
+					(name "Pin_4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -359,10 +357,10 @@
 						)
 					)
 				)
-				(pin no_connect line
+				(pin passive line
 					(at 5.08 -2.54 180)
 					(length 3.81)
-					(name "CC1"
+					(name "Pin_5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -377,10 +375,10 @@
 						)
 					)
 				)
-				(pin no_connect line
+				(pin passive line
 					(at 5.08 -5.08 180)
 					(length 3.81)
-					(name "SBU2"
+					(name "Pin_6"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -395,10 +393,10 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 5.08 -7.62 180)
 					(length 3.81)
-					(name "VBUS"
+					(name "Pin_7"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -413,10 +411,10 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 5.08 -10.16 180)
 					(length 3.81)
-					(name "GND"
+					(name "Pin_8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3903,8 +3901,16 @@
 		(uuid "0986b26e-c3b0-4569-bf4a-3e1609135b1d")
 	)
 	(no_connect
+		(at 247.65 96.52)
+		(uuid "16e8b973-1b38-468c-b769-db089d5e5832")
+	)
+	(no_connect
 		(at 120.65 93.98)
 		(uuid "1c0402f9-6acb-4eac-9a36-d7ff32338d8c")
+	)
+	(no_connect
+		(at 247.65 104.14)
+		(uuid "1d9ad467-03f3-4a85-95aa-1d918c2396ef")
 	)
 	(no_connect
 		(at 156.21 83.82)
@@ -3925,6 +3931,18 @@
 	(no_connect
 		(at 80.01 71.12)
 		(uuid "477f0d3d-f9c4-477f-8f7e-33900f379e58")
+	)
+	(no_connect
+		(at 247.65 99.06)
+		(uuid "4c65b380-967f-46de-a46b-bc02afedfb00")
+	)
+	(no_connect
+		(at 247.65 93.98)
+		(uuid "5dbc2f55-6027-4f47-a3f9-bc263f4b2700")
+	)
+	(no_connect
+		(at 247.65 101.6)
+		(uuid "6aac10b3-4a48-49dc-bc7b-d0afb1efdc5e")
 	)
 	(no_connect
 		(at 120.65 96.52)
@@ -3957,6 +3975,10 @@
 	(no_connect
 		(at 156.21 101.6)
 		(uuid "df59945f-bd06-4e37-96e2-a19a9eb274a5")
+	)
+	(no_connect
+		(at 247.65 91.44)
+		(uuid "e4543293-7f53-4505-bb28-12adae37a51d")
 	)
 	(no_connect
 		(at 156.21 129.54)
@@ -4228,7 +4250,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 86.36) (xy 246.38 86.36)
+			(xy 238.76 86.36) (xy 247.65 86.36)
 		)
 		(stroke
 			(width 0)
@@ -5560,7 +5582,7 @@
 	)
 	(wire
 		(pts
-			(xy 236.22 88.9) (xy 246.38 88.9)
+			(xy 236.22 88.9) (xy 247.65 88.9)
 		)
 		(stroke
 			(width 0)
@@ -6055,7 +6077,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x08_Pin")
-		(at 251.46 96.52 180)
+		(at 252.73 96.52 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6064,9 +6086,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "17aa7d7e-15ac-4d18-abca-4c04317e46c5")
+		(uuid "18909732-4ef9-4f02-b04d-c0c8caa03c89")
 		(property "Reference" "J1"
-			(at 252.73 93.9799 0)
+			(at 254 93.9799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6077,7 +6099,7 @@
 			)
 		)
 		(property "Value" "Conn_01x08_Pin"
-			(at 252.73 96.5199 0)
+			(at 254 96.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6087,8 +6109,8 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical"
-			(at 251.46 96.52 0)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x08_P2.54mm_Vertical"
+			(at 252.73 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6099,7 +6121,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 251.46 96.52 0)
+			(at 252.73 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6110,7 +6132,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x08, script generated"
-			(at 251.46 96.52 0)
+			(at 252.73 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6120,29 +6142,29 @@
 				)
 			)
 		)
-		(pin "4"
-			(uuid "65aa6433-3c6c-498b-9d8a-71559f9c85af")
-		)
 		(pin "5"
-			(uuid "f1b6d2c7-e3d7-4e9e-888b-11a33f58648e")
+			(uuid "22c1dd91-9593-4543-b08b-1383bdc212e0")
 		)
 		(pin "1"
-			(uuid "c4e1b63a-1913-4f16-bc4e-7e533ecf4db9")
-		)
-		(pin "7"
-			(uuid "85dd110c-6948-43cc-a489-6a207481d7a7")
-		)
-		(pin "3"
-			(uuid "52ba2a47-3a98-4e13-bcf4-029b8050637b")
-		)
-		(pin "8"
-			(uuid "2966d255-5344-41b2-be58-25450613af02")
+			(uuid "7696a930-f5b1-4c4f-b561-48a68455bbe2")
 		)
 		(pin "2"
-			(uuid "ed5efc5a-0cbf-4a32-833a-dfe84c128f4b")
+			(uuid "ad35419b-89bb-4fee-8306-7562791d3f4a")
+		)
+		(pin "4"
+			(uuid "7425076a-dec0-4cec-a9a1-f2496dd57553")
 		)
 		(pin "6"
-			(uuid "276f5d43-cffb-4f78-8368-5a45b900865f")
+			(uuid "d23f2d7f-1063-4104-bdd6-723103bea704")
+		)
+		(pin "7"
+			(uuid "13776b6a-1665-4abd-bbeb-cb3be761438b")
+		)
+		(pin "3"
+			(uuid "86407267-0ae2-4139-9438-39d70d14dd34")
+		)
+		(pin "8"
+			(uuid "9a76dfc5-0b60-49e9-a8c8-7dc74506783c")
 		)
 		(instances
 			(project "termostat-v2"
@@ -6692,7 +6714,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Radial_D10.0mm_H12.5mm_P5.00mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D11.0mm_W5.0mm_P5.00mm"
 			(at 158.4452 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -7323,6 +7345,328 @@
 		)
 	)
 	(symbol
+		(lib_id "NODEMCU-32S:NODEMCU-32S")
+		(at 138.43 106.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5b7873af-2610-4910-ad25-7dbf659baa3d")
+		(property "Reference" "U1"
+			(at 138.43 68.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "NODEMCU-32S"
+			(at 138.43 71.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "NODEMCU-ESP32S:MODULE_NODEMCU-32S"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Datasheet" ""
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "WIFI MODULE V1"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MF" "AI-Thinker"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "3.00mm"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Package" "Package"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Price" "None"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/NODEMCU-32S/AI-Thinker/view-part/?ref=eda"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "STANDARD" "Manufacturer Recommendations"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "PARTREV" "V1"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/NODEMCU-32S/AI-Thinker/view-part/?ref=snap"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MP" "NODEMCU-32S"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Availability" "Not in stock"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MANUFACTURER" "AI-Thinker"
+			(at 138.43 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(pin "J1_8"
+			(uuid "3a68f595-f261-4980-b0f0-f38b1a047b8d")
+		)
+		(pin "J2_8"
+			(uuid "108d6f54-b67c-45a8-92cb-1d296a155d59")
+		)
+		(pin "J1_16"
+			(uuid "610057fe-cbc0-401f-8f62-fb4a8d0de910")
+		)
+		(pin "J2_11"
+			(uuid "303cfbb9-bfa5-40fe-85a2-a48776fa72d7")
+		)
+		(pin "J2_9"
+			(uuid "16fdbaa9-3859-4f86-b069-c926a4e30b70")
+		)
+		(pin "J2_6"
+			(uuid "5c86b156-ec99-45a6-83c1-8f57353cb34f")
+		)
+		(pin "J2_2"
+			(uuid "428cedf5-18e3-4815-9eac-d612de363d39")
+		)
+		(pin "J2_16"
+			(uuid "44eb411c-4fbc-416e-94da-a50401f99cde")
+		)
+		(pin "J2_18"
+			(uuid "0ac98f2e-1102-4341-8c93-2cc9113c86d5")
+		)
+		(pin "J2_12"
+			(uuid "6565f5e9-80f6-4d3f-babd-ee1c7025e145")
+		)
+		(pin "J2_13"
+			(uuid "ab0f6998-c5b8-4bc1-85c9-b610712ecf98")
+		)
+		(pin "J2_14"
+			(uuid "35a3108c-680c-4020-aa63-7fb0ef90f924")
+		)
+		(pin "J2_19"
+			(uuid "3bfb70c0-f704-4b99-b71a-476bf5c57d6e")
+		)
+		(pin "J2_1"
+			(uuid "1569af2a-8045-4e4b-aa29-25af97aa5896")
+		)
+		(pin "J2_17"
+			(uuid "02b38c67-e163-42c1-9412-11ed41d1ef75")
+		)
+		(pin "J1_11"
+			(uuid "4d60008a-0601-4873-b305-8364727b41b0")
+		)
+		(pin "J1_9"
+			(uuid "99c0a7d7-660a-46e9-aed2-1c710541732d")
+		)
+		(pin "J1_15"
+			(uuid "003e65dd-fb49-4803-97b9-17d8910f97a2")
+		)
+		(pin "J1_17"
+			(uuid "5b44c314-3e5d-4400-987d-d164706baaf3")
+		)
+		(pin "J1_18"
+			(uuid "4e776975-a4ee-4d2a-a9b7-dea8837b405e")
+		)
+		(pin "J1_12"
+			(uuid "54022113-a4fb-49e1-9b4c-5f7c7dbfb1e3")
+		)
+		(pin "J2_15"
+			(uuid "97d43d8c-7dfb-4c90-90db-b42f232270b7")
+		)
+		(pin "J1_14"
+			(uuid "4010bf7e-e75a-4a78-9b6f-9d6b538881c9")
+		)
+		(pin "J1_13"
+			(uuid "d3313e20-7a18-4aa1-ad8e-2f20c7a8ae10")
+		)
+		(pin "J1_7"
+			(uuid "91771ab3-8270-4509-a548-98c42ea9221a")
+		)
+		(pin "J1_6"
+			(uuid "5c0ac008-588e-4427-aaa9-9208aac87724")
+		)
+		(pin "J1_5"
+			(uuid "ddd43842-1164-4487-8dbd-c37d218d0367")
+		)
+		(pin "J1_4"
+			(uuid "431624a5-cf00-476e-a8f8-7fd76d2c353c")
+		)
+		(pin "J1_3"
+			(uuid "a3d8ef86-e537-4899-8daa-84569af8fab5")
+		)
+		(pin "J1_2"
+			(uuid "4acd97db-6a5c-4a3d-a937-5e0e64f3f0b6")
+		)
+		(pin "J1_1"
+			(uuid "c68ad35f-7eb3-4803-8ba7-0ee47c359e80")
+		)
+		(pin "J2_7"
+			(uuid "39e28e5b-771e-43eb-aebc-3dab79a946d4")
+		)
+		(pin "J2_10"
+			(uuid "544ea23f-13e8-4296-b7bd-412127574526")
+		)
+		(pin "J2_5"
+			(uuid "f87eaebd-7a0e-48c8-a786-9994197e8a32")
+		)
+		(pin "J2_4"
+			(uuid "5c240501-ff24-47df-aa9f-8a5721b32257")
+		)
+		(pin "J1_19"
+			(uuid "059b5a28-2c13-40ee-b535-b2964dbd876b")
+		)
+		(pin "J2_3"
+			(uuid "d19d44d3-7775-4f86-b2c1-1d4d0a03d4ee")
+		)
+		(pin "J1_10"
+			(uuid "8bee58db-ca69-47a8-a5f0-0a4b3e35b87d")
+		)
+		(instances
+			(project "termostat-v2"
+				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 54.61 86.36 0)
 		(unit 1)
@@ -7545,7 +7889,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Radial_D10.0mm_H12.5mm_P5.00mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D11.0mm_W5.0mm_P5.00mm"
 			(at 105.7148 68.58 0)
 			(hide yes)
 			(show_name no)
@@ -8348,328 +8692,6 @@
 		)
 	)
 	(symbol
-		(lib_id "NODEMCU-32S:NODEMCU-32S")
-		(at 138.43 106.68 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a4e52f91-65fa-4005-938c-a02f68375638")
-		(property "Reference" "U1"
-			(at 138.43 68.58 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NODEMCU-32S"
-			(at 138.43 71.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "NODEMCU-ESP32S:MODULE_NODEMCU-32S"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Datasheet" ""
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "WIFI MODULE V1"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MF" "AI-Thinker"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MAXIMUM_PACKAGE_HEIGHT" "3.00mm"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Package" "Package"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Price" "None"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Check_prices" "https://www.snapeda.com/parts/NODEMCU-32S/AI-Thinker/view-part/?ref=eda"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "STANDARD" "Manufacturer Recommendations"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "PARTREV" "V1"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "SnapEDA_Link" "https://www.snapeda.com/parts/NODEMCU-32S/AI-Thinker/view-part/?ref=snap"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MP" "NODEMCU-32S"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Availability" "Not in stock"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "MANUFACTURER" "AI-Thinker"
-			(at 138.43 106.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(pin "J1_14"
-			(uuid "f756c348-8330-42f8-94df-d30e642d5170")
-		)
-		(pin "J1_15"
-			(uuid "b322cd01-936d-4e9e-bd1e-91ce3d1ae493")
-		)
-		(pin "J1_16"
-			(uuid "d5393a84-ef1c-43bc-8fab-fcbec1843626")
-		)
-		(pin "J1_17"
-			(uuid "127d4855-54e5-459d-b5d9-de1d690c74b0")
-		)
-		(pin "J1_18"
-			(uuid "9a3c4010-bf6a-4c09-9496-6edad9ff193a")
-		)
-		(pin "J2_14"
-			(uuid "c16ff2b8-2e30-4c08-a8f3-4ccc6ee33f1c")
-		)
-		(pin "J2_16"
-			(uuid "18933302-baf4-42f7-b8c0-c92e0fa7afaf")
-		)
-		(pin "J2_5"
-			(uuid "2a397f61-434b-4485-9d81-5c92fa887cf1")
-		)
-		(pin "J2_7"
-			(uuid "00b973f9-a63f-4d7a-90e8-9cda306e3ffa")
-		)
-		(pin "J2_8"
-			(uuid "263de5e4-c6f6-4c77-b2d0-e56e3c442629")
-		)
-		(pin "J2_3"
-			(uuid "3d94f052-0092-4c72-8095-027d0ad890e2")
-		)
-		(pin "J2_6"
-			(uuid "2d1ae7a7-9af9-4994-a745-34b4d1d97544")
-		)
-		(pin "J2_9"
-			(uuid "2fcebd0a-f806-4f90-ac3d-12639050b214")
-		)
-		(pin "J2_1"
-			(uuid "bc862eb4-4bbf-4bd5-bc87-8fdc635f8bac")
-		)
-		(pin "J2_4"
-			(uuid "06d79512-1d3c-49c3-b865-c8d5e7ce5b19")
-		)
-		(pin "J1_19"
-			(uuid "e747b9a9-95c8-4b2f-924a-c8c86465625b")
-		)
-		(pin "J2_2"
-			(uuid "c6a5c388-fba3-4ae6-9efa-d30b8e86386b")
-		)
-		(pin "J2_10"
-			(uuid "e72f7546-cfc0-4e39-9d44-2aad27df8fff")
-		)
-		(pin "J2_11"
-			(uuid "479ccd5e-84c6-4257-bcc9-febbf653741a")
-		)
-		(pin "J2_12"
-			(uuid "32b2183b-9a9e-4f73-99d6-e2fc2592c79c")
-		)
-		(pin "J2_13"
-			(uuid "1bfba61b-4b6d-4b46-9f8d-9c85ba5449c0")
-		)
-		(pin "J2_15"
-			(uuid "0abfb891-ba2c-4cc7-b359-636cec073f6d")
-		)
-		(pin "J2_17"
-			(uuid "6f65b44f-2b04-46b9-92f7-4e980f34e63b")
-		)
-		(pin "J2_18"
-			(uuid "9edd8d86-0f5a-486e-965c-c1030411c748")
-		)
-		(pin "J2_19"
-			(uuid "ffaf354a-822b-4e6a-8f85-99c0ea9b39c9")
-		)
-		(pin "J1_2"
-			(uuid "56d6d08b-22e0-4c98-a1f3-2999871c73fe")
-		)
-		(pin "J1_8"
-			(uuid "509f2ff3-a005-4bf7-bab2-1ec6e95e1420")
-		)
-		(pin "J1_9"
-			(uuid "3c2c4207-a82b-4a89-a180-af9abb81ef9c")
-		)
-		(pin "J1_11"
-			(uuid "c7c7f596-6173-4880-aeb3-690dacf73cae")
-		)
-		(pin "J1_12"
-			(uuid "72e72dab-49dc-40e0-ba6f-14816b4757de")
-		)
-		(pin "J1_7"
-			(uuid "5304ae1c-a466-42f6-8796-a40aa5f1e091")
-		)
-		(pin "J1_13"
-			(uuid "2b8136c1-44ef-4772-ae10-aa7a9f055267")
-		)
-		(pin "J1_10"
-			(uuid "ad4a7436-b78a-484b-83e8-a3f6443bb6f2")
-		)
-		(pin "J1_5"
-			(uuid "d57d1adf-bbbf-459c-8a2d-2d3f5e7e2b95")
-		)
-		(pin "J1_4"
-			(uuid "3841fe14-3c7b-47a9-a441-b5ffaf94e934")
-		)
-		(pin "J1_6"
-			(uuid "b9c2f368-96ea-4abf-9dcb-24c3f8f0812d")
-		)
-		(pin "J1_1"
-			(uuid "9a32befe-0c81-4f9c-af1e-0774f6bb5ace")
-		)
-		(pin "J1_3"
-			(uuid "5bc99038-0f00-4aa7-aee8-d9c95af2dd48")
-		)
-		(instances
-			(project "termostat-v2"
-				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
-					(reference "U1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Transistor_BJT:PN2222A")
 		(at 74.93 99.06 180)
 		(unit 1)
@@ -8892,7 +8914,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:C_Radial_D10.0mm_H12.5mm_P5.00mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D11.0mm_W5.0mm_P5.00mm"
 			(at 190.8048 128.27 0)
 			(hide yes)
 			(show_name no)
