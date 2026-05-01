@@ -244,7 +244,24 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      [
+        "footprint_link_issues|1422400|927100|ab1aea26-b49a-4c38-87a9-2b98f2524763|00000000-0000-0000-0000-000000000000|||",
+        ""
+      ],
+      [
+        "lib_symbol_issues|1422400|927100|ab1aea26-b49a-4c38-87a9-2b98f2524763|00000000-0000-0000-0000-000000000000|||",
+        ""
+      ],
+      [
+        "multiple_net_names|2108200|711200|386cdc7b-0bd7-43a1-bdec-810920d37008|7a4dcef9-0d9b-4734-be4a-1b20fdb2549d|/ac78e03d-eaa5-43c4-8730-cba06800c7fc|/ac78e03d-eaa5-43c4-8730-cba06800c7fc|/ac78e03d-eaa5-43c4-8730-cba06800c7fc",
+        ""
+      ],
+      [
+        "multiple_net_names|635000|1384300|386cdc7b-0bd7-43a1-bdec-810920d37008|e7dee08e-0a63-4805-88ac-2c6d28b17143|/ac78e03d-eaa5-43c4-8730-cba06800c7fc|/ac78e03d-eaa5-43c4-8730-cba06800c7fc|/ac78e03d-eaa5-43c4-8730-cba06800c7fc",
+        ""
+      ]
+    ],
     "meta": {
       "version": 0
     },
@@ -469,13 +486,10 @@
   },
   "libraries": {
     "pinned_footprint_libs": [],
-    "pinned_symbol_libs": [
-      "ESP32S-38-NodeMCU",
-      "ESP32-C3-SuperMini"
-    ]
+    "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "starting_module-v2.kicad_pro",
+    "filename": "termostat-v2.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -585,36 +599,12 @@
           "label": "Datasheet",
           "name": "Datasheet",
           "show": true
-        },
-        {
-          "group_by": false,
-          "label": "Sim.Pins",
-          "name": "Sim.Pins",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "Sim.Device",
-          "name": "Sim.Device",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "Description",
-          "name": "Description",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "#",
-          "name": "${ITEM_NUMBER}",
-          "show": false
         }
       ],
       "filter_string": "",
       "group_symbols": true,
       "include_excluded_from_bom": true,
-      "name": "",
+      "name": "Default Editing",
       "sort_asc": true,
       "sort_field": "Reference"
     },
@@ -647,14 +637,6 @@
     "meta": {
       "version": 1
     },
-    "ngspice": {
-      "fix_include_paths": true,
-      "meta": {
-        "version": 0
-      },
-      "model_mode": 4,
-      "workbook_filename": ""
-    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "reuse_designators": true,
@@ -662,18 +644,18 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "starting_module-v2.kicad_sch",
-        "name": "starting_module-v2",
-        "uuid": "afbf1656-3cc8-4ba3-a780-b64b3df023f3"
+        "filename": "termostat-v2.kicad_sch",
+        "name": "termostat-v2",
+        "uuid": "ac78e03d-eaa5-43c4-8730-cba06800c7fc"
       }
     ],
-    "used_designators": "",
+    "used_designators": "U1,U3",
     "variants": []
   },
   "sheets": [
     [
-      "afbf1656-3cc8-4ba3-a780-b64b3df023f3",
-      "starting_module-v2"
+      "ac78e03d-eaa5-43c4-8730-cba06800c7fc",
+      "termostat-v2"
     ]
   ],
   "text_variables": {},
