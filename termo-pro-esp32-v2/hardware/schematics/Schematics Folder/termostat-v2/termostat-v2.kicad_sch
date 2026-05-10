@@ -3801,7 +3801,7 @@
 	)
 	(text "(5V)"
 		(exclude_from_sim no)
-		(at 160.02 59.944 0)
+		(at 159.766 74.93 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4053,10 +4053,10 @@
 		(uuid "67bbdca7-24cf-4c52-b080-018decdc47ec")
 	)
 	(junction
-		(at 102.87 66.04)
+		(at 173.99 66.04)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "6b66b029-858d-4e2a-981a-54d9ed56ab16")
+		(uuid "6ed675c0-a3c7-4030-b3a3-69154196dfac")
 	)
 	(junction
 		(at 102.87 53.34)
@@ -4075,6 +4075,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "beafae8a-0abd-41f3-a3ef-c5796153dce1")
+	)
+	(junction
+		(at 162.56 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c1713874-60b0-47a8-b567-20084f6744d4")
 	)
 	(junction
 		(at 85.09 106.68)
@@ -4226,17 +4232,6 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 66.04) (xy 106.68 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "0598fa6c-113c-446a-b6b6-ba206e7f3126")
-	)
-	(wire
-		(pts
 			(xy 201.93 99.06) (xy 177.8 99.06)
 		)
 		(stroke
@@ -4269,17 +4264,6 @@
 	)
 	(wire
 		(pts
-			(xy 157.48 46.99) (xy 172.72 46.99)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 255 1)
-		)
-		(uuid "099caf1b-c460-4544-814c-1bc9663e7e42")
-	)
-	(wire
-		(pts
 			(xy 194.31 146.05) (xy 207.01 146.05)
 		)
 		(stroke
@@ -4288,6 +4272,17 @@
 			(color 0 255 255 1)
 		)
 		(uuid "0a7b6a8f-2274-43dc-9b6b-a97c55b5ac28")
+	)
+	(wire
+		(pts
+			(xy 176.53 66.04) (xy 173.99 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "0ae11622-7693-4c30-8f3c-96f7ffbdb77b")
 	)
 	(wire
 		(pts
@@ -4335,17 +4330,6 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 66.04) (xy 102.87 81.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "10490f2a-af5b-4ebb-a72f-30a8dc8bba1d")
-	)
-	(wire
-		(pts
 			(xy 114.3 147.32) (xy 114.3 151.13)
 		)
 		(stroke
@@ -4353,6 +4337,17 @@
 			(type default)
 		)
 		(uuid "12b71ecc-8185-4414-99d9-90b81b8ab1eb")
+	)
+	(wire
+		(pts
+			(xy 162.56 60.96) (xy 165.1 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "1460ca3d-5e9b-445f-8cd0-486f654468c3")
 	)
 	(wire
 		(pts
@@ -4454,6 +4449,17 @@
 	)
 	(wire
 		(pts
+			(xy 173.99 71.12) (xy 172.72 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "268be0f8-5261-4807-b24b-f127047d561d")
+	)
+	(wire
+		(pts
 			(xy 238.76 57.15) (xy 242.57 57.15)
 		)
 		(stroke
@@ -4538,17 +4544,6 @@
 			(color 255 0 0 1)
 		)
 		(uuid "34757ede-9d62-4e97-bb2b-b47819ad42e2")
-	)
-	(wire
-		(pts
-			(xy 157.48 55.88) (xy 157.48 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "34b8396a-45d7-4d59-b8ec-77a48869815a")
 	)
 	(wire
 		(pts
@@ -4704,6 +4699,17 @@
 	)
 	(wire
 		(pts
+			(xy 176.53 57.15) (xy 176.53 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "510f982c-aa55-4dcf-b2c2-b53807f2e528")
+	)
+	(wire
+		(pts
 			(xy 46.99 77.47) (xy 46.99 82.55)
 		)
 		(stroke
@@ -4734,6 +4740,17 @@
 			(color 0 0 255 1)
 		)
 		(uuid "5524119d-7336-4344-a798-17d4c3e50294")
+	)
+	(wire
+		(pts
+			(xy 173.99 60.96) (xy 172.72 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "56f6ed54-8cd5-46f3-bea4-1688b6189fb2")
 	)
 	(wire
 		(pts
@@ -4812,17 +4829,6 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 66.04) (xy 106.68 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "5daf31ab-5be5-49ea-a63b-b7ca85826330")
-	)
-	(wire
-		(pts
 			(xy 166.37 127) (xy 156.21 127)
 		)
 		(stroke
@@ -4864,6 +4870,17 @@
 			(color 255 0 204 1)
 		)
 		(uuid "6206343b-a332-42d2-b0a9-5f8f676f36cb")
+	)
+	(wire
+		(pts
+			(xy 173.99 60.96) (xy 173.99 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "64e740df-5713-4092-a3f0-5ade550e8631")
 	)
 	(wire
 		(pts
@@ -4939,17 +4956,6 @@
 			(color 0 11 255 1)
 		)
 		(uuid "70f6e333-fc7c-4e0f-b744-137c73243d38")
-	)
-	(wire
-		(pts
-			(xy 106.68 80.01) (xy 109.22 80.01)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 255 1)
-		)
-		(uuid "74bdc391-6767-40a5-8a11-f5f87a4cb2a7")
 	)
 	(wire
 		(pts
@@ -5138,17 +5144,6 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 80.01) (xy 106.68 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 255 1)
-		)
-		(uuid "88c11ba5-4e91-4b03-89b9-2a6fd3a37024")
-	)
-	(wire
-		(pts
 			(xy 222.25 77.47) (xy 219.71 77.47)
 		)
 		(stroke
@@ -5214,6 +5209,17 @@
 	)
 	(wire
 		(pts
+			(xy 173.99 66.04) (xy 173.99 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "8fe6fe80-8860-4559-ad06-646963390b11")
+	)
+	(wire
+		(pts
 			(xy 220.98 52.07) (xy 219.71 52.07)
 		)
 		(stroke
@@ -5258,7 +5264,7 @@
 	)
 	(wire
 		(pts
-			(xy 157.48 76.2) (xy 156.21 76.2)
+			(xy 162.56 76.2) (xy 156.21 76.2)
 		)
 		(stroke
 			(width 0)
@@ -5266,6 +5272,17 @@
 			(color 255 0 0 1)
 		)
 		(uuid "95fd9f02-c7fe-4bcd-9f72-70c362184c91")
+	)
+	(wire
+		(pts
+			(xy 162.56 71.12) (xy 165.1 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "983a2b3a-3e4a-4d60-9895-b5ee20d6e319")
 	)
 	(wire
 		(pts
@@ -5496,7 +5513,7 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 53.34) (xy 102.87 66.04)
+			(xy 102.87 53.34) (xy 102.87 81.28)
 		)
 		(stroke
 			(width 0)
@@ -5515,6 +5532,17 @@
 			(color 0 0 255 1)
 		)
 		(uuid "b952ab7b-df06-4760-850a-e1570a77801f")
+	)
+	(wire
+		(pts
+			(xy 162.56 71.12) (xy 162.56 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "bbbd60bf-a742-4d1d-ad4f-9f02f4140719")
 	)
 	(wire
 		(pts
@@ -5645,28 +5673,6 @@
 			(color 255 0 0 1)
 		)
 		(uuid "c73a44b2-fd2f-43d8-aafb-75b564dd2a32")
-	)
-	(wire
-		(pts
-			(xy 157.48 46.99) (xy 157.48 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 255 1)
-		)
-		(uuid "c9a1b869-c99c-4cff-a416-bb713681c1b9")
-	)
-	(wire
-		(pts
-			(xy 172.72 46.99) (xy 172.72 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 255 1)
-		)
-		(uuid "ca0ca550-702e-48fe-8105-f09baf68c10f")
 	)
 	(wire
 		(pts
@@ -5918,6 +5924,17 @@
 	)
 	(wire
 		(pts
+			(xy 162.56 60.96) (xy 162.56 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "ef501396-98da-4c44-8abe-92898bd486ec")
+	)
+	(wire
+		(pts
 			(xy 200.66 97.79) (xy 200.66 34.29)
 		)
 		(stroke
@@ -6036,7 +6053,7 @@
 		(uuid "2fb11bd9-95ce-461b-8be8-92c7c34ed8a0")
 	)
 	(label "+VDC"
-		(at 157.48 57.15 0)
+		(at 162.56 73.66 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6086,85 +6103,6 @@
 			(justify left bottom)
 		)
 		(uuid "fa8b3278-84bd-497c-83aa-b797aa984a8d")
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 109.22 80.01 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "015a3a01-be2e-4c90-a6a3-1eb2ba03be01")
-		(property "Reference" "#PWR016"
-			(at 115.57 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 113.03 80.0099 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 109.22 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 109.22 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 109.22 80.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a03c447f-1998-41ce-ae7d-adbe511a91c1")
-		)
-		(instances
-			(project "termostat-v2"
-				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
-					(reference "#PWR016")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -6929,7 +6867,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 157.48 52.07 0)
+		(at 168.91 71.12 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6937,32 +6875,29 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "30283d2a-b018-48ae-acb1-bbe360530d2b")
 		(property "Reference" "C2"
-			(at 161.29 50.7999 0)
+			(at 168.91 65.278 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "50V 220nF"
-			(at 161.29 53.3399 0)
+			(at 168.402 67.818 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" "Capacitor_THT:C_Disc_D11.0mm_W5.0mm_P5.00mm"
-			(at 158.4452 55.88 0)
+			(at 172.72 70.1548 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6973,7 +6908,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 157.48 52.07 0)
+			(at 168.91 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6984,7 +6919,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 157.48 52.07 0)
+			(at 168.91 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7465,6 +7400,86 @@
 			(project "termostat-v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#FLG01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 168.91 60.96 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4671aa8e-ae81-4427-b986-f6785defcaf7")
+		(property "Reference" "C3"
+			(at 168.021 53.34 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "16V 680uF"
+			(at 168.021 55.88 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P5.00mm"
+			(at 172.72 59.9948 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 168.91 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 168.91 60.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1e1e3048-54b7-452d-a70c-df95fe71cb7d")
+		)
+		(pin "2"
+			(uuid "20f744e1-6b00-4be1-a19d-a606a2283f8d")
+		)
+		(instances
+			(project "termostat-v2"
+				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -8104,87 +8119,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 106.68 72.39 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "64f90e21-a655-47c9-aea7-bcdaf533c60c")
-		(property "Reference" "C3"
-			(at 108.712 69.088 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "50V 220nF"
-			(at 110.49 73.6599 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Capacitor_THT:C_Disc_D11.0mm_W5.0mm_P5.00mm"
-			(at 105.7148 68.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 106.68 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor"
-			(at 106.68 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "ae05d22b-e775-476c-8b37-32aeeb646846")
-		)
-		(pin "1"
-			(uuid "dcc18dba-fcad-4fa6-845f-563c2f36f971")
-		)
-		(instances
-			(project "termostat-v2"
-				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
-					(reference "C3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 191.77 157.48 90)
 		(unit 1)
@@ -8810,6 +8744,84 @@
 			(project "termostat-v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "SW3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 176.53 57.15 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "97f7e1a0-e01e-4c60-a282-84c82104f5f2")
+		(property "Reference" "#PWR019"
+			(at 176.53 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 176.53 52.07 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 176.53 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 176.53 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 176.53 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "751a343a-4645-4199-90a0-31672a222c27")
+		)
+		(instances
+			(project "termostat-v2"
+				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -9461,85 +9473,6 @@
 			(project "termostat-v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR04")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 172.72 54.61 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d0b6d0cb-a60a-47ba-8309-6b4092f66486")
-		(property "Reference" "#PWR015"
-			(at 172.72 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 175.26 55.8799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 172.72 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 172.72 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 172.72 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "cb2eb5d7-f08a-441a-8b02-ef775d2060bf")
-		)
-		(instances
-			(project "termostat-v2"
-				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
-					(reference "#PWR015")
 					(unit 1)
 				)
 			)

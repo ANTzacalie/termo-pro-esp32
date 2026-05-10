@@ -54,16 +54,7 @@
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [
-        [
-          "pth_inside_courtyard|100000000|77000000|fbce6938-f0e1-4609-a996-04319c9534e2|d308f8fe-3cdd-420b-964d-c7a066cf31b7",
-          ""
-        ],
-        [
-          "pth_inside_courtyard|95000000|77000000|c515e1e7-e880-43d5-a621-9af6a1a1e967|d308f8fe-3cdd-420b-964d-c7a066cf31b7",
-          ""
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -537,7 +528,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../../../pcb/Gerber Files/",
       "specctra_dsn": "",
       "vrml": ""
     },
@@ -549,7 +540,7 @@
       "method": 0,
       "sort_order": 0
     },
-    "bom_export_filename": "/var/home/antzacalie/Desktop/termo-pro-esp32-v2/hardware/pcb/BOM Files/BOM_termostat-v2.csv",
+    "bom_export_filename": "../../../pcb/BOM Files/termostat-v2.csv",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",
@@ -700,7 +691,7 @@
           "group_by": false,
           "label": "Description",
           "name": "Description",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
@@ -757,7 +748,7 @@
         "uuid": "ac78e03d-eaa5-43c4-8730-cba06800c7fc"
       }
     ],
-    "used_designators": "D1,J1-2,U1",
+    "used_designators": "",
     "variants": []
   },
   "sheets": [

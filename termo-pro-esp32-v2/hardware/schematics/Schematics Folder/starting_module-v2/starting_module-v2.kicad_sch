@@ -3116,16 +3116,6 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "ESP32-C3-SuperMini"
-		(exclude_from_sim no)
-		(at 108.204 160.782 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "139a4cba-a106-46f7-957e-d7e6ff19d756")
-	)
 	(text "1\n"
 		(exclude_from_sim no)
 		(at 187.96 184.15 0)
@@ -3272,6 +3262,12 @@
 		(uuid "a261070c-385f-4e2c-8ead-fd114ad1d557")
 	)
 	(junction
+		(at 125.73 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a8934cd5-f499-4a1f-ba8f-e3907e2cd991")
+	)
+	(junction
 		(at 180.34 60.96)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3372,6 +3368,17 @@
 			(color 0 132 132 1)
 		)
 		(uuid "06785451-7fe6-4f36-937f-89d1e480abd5")
+	)
+	(wire
+		(pts
+			(xy 111.76 101.6) (xy 109.22 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "09799e44-d3fc-4aa5-b4bf-f454a84928aa")
 	)
 	(wire
 		(pts
@@ -3516,7 +3523,7 @@
 	)
 	(wire
 		(pts
-			(xy 125.73 101.6) (xy 125.73 128.27)
+			(xy 125.73 101.6) (xy 125.73 114.3)
 		)
 		(stroke
 			(width 0)
@@ -3545,17 +3552,6 @@
 			(color 255 0 0 1)
 		)
 		(uuid "343d2ba8-f74f-4023-b35b-6a660ef419b8")
-	)
-	(wire
-		(pts
-			(xy 119.38 114.3) (xy 119.38 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 0 0 255 1)
-		)
-		(uuid "35570d94-57fd-440e-88d6-7e6f80e1d4d9")
 	)
 	(wire
 		(pts
@@ -3766,6 +3762,17 @@
 	)
 	(wire
 		(pts
+			(xy 125.73 114.3) (xy 125.73 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "67a8f7e5-5def-4ec4-adf8-38ea54bb9c16")
+	)
+	(wire
+		(pts
 			(xy 83.82 165.1) (xy 83.82 143.51)
 		)
 		(stroke
@@ -3831,17 +3838,6 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 101.6) (xy 119.38 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-			(color 255 0 0 1)
-		)
-		(uuid "7cfa7282-1664-41eb-98ed-9c575dd074d0")
-	)
-	(wire
-		(pts
 			(xy 63.5 165.1) (xy 83.82 165.1)
 		)
 		(stroke
@@ -3896,6 +3892,17 @@
 	)
 	(wire
 		(pts
+			(xy 119.38 114.3) (xy 125.73 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "9476cbd0-c42a-4202-9d06-a3da1d7c6704")
+	)
+	(wire
+		(pts
 			(xy 175.26 125.73) (xy 175.26 121.92)
 		)
 		(stroke
@@ -3907,7 +3914,7 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 114.3) (xy 118.11 114.3)
+			(xy 111.76 114.3) (xy 109.22 114.3)
 		)
 		(stroke
 			(width 0)
@@ -4549,7 +4556,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "470"
+		(property "Value" "220"
 			(at 182.88 96.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5180,7 +5187,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 118.11 114.3 270)
+		(at 109.22 114.3 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5190,7 +5197,7 @@
 		(dnp no)
 		(uuid "4c79ac56-af5e-42dc-88b1-9063c7f717d7")
 		(property "Reference" "#PWR014"
-			(at 111.76 114.3 0)
+			(at 102.87 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5201,7 +5208,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 113.792 116.078 0)
+			(at 104.902 116.078 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5212,7 +5219,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 118.11 114.3 0)
+			(at 109.22 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5223,7 +5230,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 118.11 114.3 0)
+			(at 109.22 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5234,7 +5241,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 118.11 114.3 0)
+			(at 109.22 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5356,7 +5363,7 @@
 				)
 			)
 		)
-		(property "Value" "470"
+		(property "Value" "220"
 			(at 124.46 185.42 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5655,6 +5662,84 @@
 	)
 	(symbol
 		(lib_id "power:GND")
+		(at 109.22 101.6 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8fa80ba6-acb2-470e-af90-f94088e60331")
+		(property "Reference" "#PWR015"
+			(at 102.87 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 104.902 103.378 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 109.22 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 109.22 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 109.22 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "223ce913-2cf3-429b-8fba-614226334e5d")
+		)
+		(instances
+			(project "starting_module-v2"
+				(path "/afbf1656-3cc8-4ba3-a780-b64b3df023f3"
+					(reference "#PWR015")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
 		(at 167.64 148.59 0)
 		(unit 1)
 		(body_style 1)
@@ -5826,7 +5911,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 119.38 107.95 180)
+		(at 115.57 114.3 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5837,29 +5922,27 @@
 		(fields_autoplaced yes)
 		(uuid "997417dc-3c38-4277-bc3e-91a6b5b28f43")
 		(property "Reference" "C2"
-			(at 123.19 106.6799 0)
+			(at 115.57 106.68 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Value" "50V 220nF"
-			(at 123.19 109.2199 0)
+			(at 115.57 109.22 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" "Capacitor_THT:C_Disc_D11.0mm_W5.0mm_P5.00mm"
-			(at 118.4148 104.14 0)
+			(at 111.76 115.2652 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5870,7 +5953,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 119.38 107.95 0)
+			(at 115.57 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5881,7 +5964,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 119.38 107.95 0)
+			(at 115.57 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6499,7 +6582,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "470"
+		(property "Value" "220"
 			(at 173.99 96.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6553,6 +6636,87 @@
 			(project "starting_module-v2"
 				(path "/afbf1656-3cc8-4ba3-a780-b64b3df023f3"
 					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 115.57 101.6 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ddccd50b-103e-48ac-b1fe-86050982d5af")
+		(property "Reference" "C3"
+			(at 116.84 92.202 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10V 470uF"
+			(at 114.554 87.63 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P5.00mm"
+			(at 111.76 102.5652 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 115.57 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b1af6985-2048-48ad-9ba9-bec172d90dba")
+		)
+		(pin "2"
+			(uuid "010c7ca2-77fb-4e9d-823a-89d8191818f1")
+		)
+		(instances
+			(project "starting_module-v2"
+				(path "/afbf1656-3cc8-4ba3-a780-b64b3df023f3"
+					(reference "C3")
 					(unit 1)
 				)
 			)

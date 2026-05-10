@@ -344,7 +344,7 @@
 		)
 		(uuid "a90b9a51-69c5-449e-80e8-4e80c9e13869")
 	)
-	(text "Size: L = , W = , H = . "
+	(text "Size: L = 50mm, W = 35mm, H = 21mm. "
 		(exclude_from_sim no)
 		(at 69.85 73.914 0)
 		(effects
