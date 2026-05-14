@@ -4556,7 +4556,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "220"
+		(property "Value" "50"
 			(at 182.88 96.5199 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6582,7 +6582,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "220"
+		(property "Value" "50"
 			(at 173.99 96.5199 0)
 			(show_name no)
 			(do_not_autoplace no)

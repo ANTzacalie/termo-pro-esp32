@@ -1361,7 +1361,7 @@
 				)
 			)
 		)
-		(property "Value" "220"
+		(property "Value" "50"
 			(at 5.08 2.37 90)
 			(layer "F.Fab")
 			(uuid "1177bf6e-a422-4599-8b6b-1a5b45a1751f")
@@ -3535,7 +3535,7 @@
 				)
 			)
 		)
-		(property "Value" "220"
+		(property "Value" "50"
 			(at 5.08 2.37 90)
 			(layer "F.Fab")
 			(uuid "ee3dadcb-a698-4006-b95c-b4e51fed5a0b")
@@ -8925,7 +8925,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "220"
+	(gr_text "50"
 		(at 167.575 67.025 90)
 		(layer "F.SilkS")
 		(uuid "3a371615-1ee1-4d45-8264-0b853d019918")
@@ -8937,7 +8937,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "220"
+	(gr_text "50"
 		(at 208.6 66.975 90)
 		(layer "F.SilkS")
 		(uuid "2df16830-ff58-41ff-a8b1-a8474c9c4b03")

@@ -548,7 +548,7 @@
       "method": 0,
       "sort_order": 0
     },
-    "bom_export_filename": "../../pcb/bom_files/starting_module-v2.csv",
+    "bom_export_filename": "../../pcb/bom_files/starting_unit-v2.csv",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",

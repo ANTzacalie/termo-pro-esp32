@@ -24,7 +24,8 @@ Components used:
 
 - 1 x ESP32-C3-Supermini Devkit 16pin;
 - 1 x 8PIN_P2.54mm USB-C Soldered module;
-- 3 x 220 ohm resistors; *P1*
+- 1 x 220 ohm resistors; *P1*
+- 2 x 50 ohm resistor;  *P1*
 - 1 x 330 ohm resistor;
 - 1 x 10k resistor;
 - 1 x 25V 220uF capacitor;
@@ -32,8 +33,8 @@ Components used:
 - 1 x 10V 470uF capacitor;
 - 1 x 12mm tactile LED(1.8V) button; *P1*
 - 1 x PN2222A BJT NPN Transistor;
-- 1 x Rectangular GREEN LED(1.8V); *P1*
-- 1 x Rectangular RED LED(1.8V); *P1*
+- 1 x Rectangular GREEN LED(3V); *P1*
+- 1 x Rectangular RED LED(3V); *P1*
 - 2 x Screw Terminal Blocks P5.08 - 5mm;
 - 1 x 1N4007 Diode;
 - 1 x SRD_FORM_C 5V Relay;
