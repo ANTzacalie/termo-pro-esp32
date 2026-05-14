@@ -5850,7 +5850,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "LED_THT:LED_D5.0mm_FlatTop"
+		(property "Footprint" "LED_THT:LED_Rectangular_W5.0mm_H2.0mm"
 			(at 171.45 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -6756,7 +6756,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "LED_THT:LED_D5.0mm_FlatTop"
+		(property "Footprint" "LED_THT:LED_Rectangular_W5.0mm_H2.0mm"
 			(at 180.34 78.74 0)
 			(hide yes)
 			(show_name no)
