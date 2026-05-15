@@ -1,5 +1,3 @@
-Components used:
-
 **** Thermostat Unit ****
 
 - 1 x WC1602A Display;
@@ -77,7 +75,7 @@ Total Power Consumption(P = I x V) => 335mA x 5V + 80mA x 5V + 2x6mA x 0.3V + 20
 - 10k RM65 Potentiometer for the display.
 - DHT11 raw module needs an 10k pull-up to 3.3V, so to be safe for GPIO.
 - Capacitors values C1,C2,C3 and C4:
-*C1&C3 ESP32WROOM32-NodeMCU32S has current spikes during WIFI operations to up to 500mA, calculated electrolithic capacitance is 750uF, another value hard to get , so an 680uF and 220uF has been chosen , 560uF at the 5V VIN of the esp32 and 220uF at the USB-C 5VDC;
+*C1&C3 ESP32WROOM32-NodeMCU32S has current spikes during WIFI operations to up to 500mA, calculated electrolithic capacitance is 750uF, so 680uF at the 5V VIN of the esp32 and 220uF at the USB-C 5VDC;
 *C2 the 220nF capacitor si placed very close to the ESP32 5V(VIN) pin , this is used for bypass.
 *C4 another 220nF capacitor is again for bypass and stability of the DHT11 sensor.
 
