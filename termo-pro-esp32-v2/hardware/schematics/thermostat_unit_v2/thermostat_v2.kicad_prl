@@ -85,7 +85,7 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "termostat-v2.kicad_prl",
+    "filename": "thermostat_v2.kicad_prl",
     "version": 5
   },
   "net_inspector_panel": {

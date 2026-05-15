@@ -544,7 +544,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "../../../pcb/Gerber Files/",
+      "plot": "../../pcb/gerber_files/thermostat_unit/",
       "specctra_dsn": "",
       "vrml": ""
     },
@@ -770,7 +770,7 @@
   "sheets": [
     [
       "ac78e03d-eaa5-43c4-8730-cba06800c7fc",
-      "termostat-v2"
+      "thermostat_v2"
     ]
   ],
   "text_variables": {},

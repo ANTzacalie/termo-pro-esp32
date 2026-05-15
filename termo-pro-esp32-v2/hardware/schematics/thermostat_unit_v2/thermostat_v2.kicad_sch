@@ -3840,9 +3840,9 @@
 		)
 		(uuid "1839b4a9-cf05-4258-8e7b-a1a3807cc65e")
 	)
-	(text "10k pull-up to 3.3V so its safe for IO"
+	(text "10k pull-up to 3.3V so IO can read a stable signal."
 		(exclude_from_sim no)
-		(at 227.584 152.146 0)
+		(at 234.442 150.114 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3925,17 +3925,6 @@
 			)
 		)
 		(uuid "60a0d3fc-52b8-42da-91b8-d389e54477ae")
-	)
-	(text "(5V)"
-		(exclude_from_sim no)
-		(at 189.738 112.268 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(color 0 0 0 1)
-			)
-		)
-		(uuid "6362ce0a-3733-431e-93ba-f414c52528b9")
 	)
 	(text "(5V)"
 		(exclude_from_sim no)
@@ -6052,6 +6041,17 @@
 		)
 		(uuid "2fb11bd9-95ce-461b-8be8-92c7c34ed8a0")
 	)
+	(label "V(3.3)"
+		(at 186.69 110.49 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 255 0 0 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "54e1bb9a-10e4-4137-84a9-6c795639b38e")
+	)
 	(label "+VDC"
 		(at 162.56 73.66 0)
 		(effects
@@ -6093,16 +6093,6 @@
 			(justify left bottom)
 		)
 		(uuid "f51dafc4-0532-4542-a84e-bf4aee4a8103")
-	)
-	(label "+VDC"
-		(at 186.69 110.49 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "fa8b3278-84bd-497c-83aa-b797aa984a8d")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -6174,7 +6164,7 @@
 			(uuid "ed7702d0-9c26-447a-8d9e-10cd0bea6999")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR010")
 					(unit 1)
@@ -6252,7 +6242,7 @@
 			(uuid "0255ab36-21f3-4eba-a9a5-b34805807e84")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR017")
 					(unit 1)
@@ -6352,7 +6342,7 @@
 			(uuid "9a76dfc5-0b60-49e9-a8c8-7dc74506783c")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "J1")
 					(unit 1)
@@ -6430,7 +6420,7 @@
 			(uuid "15a6bd52-0bc6-4caa-8e90-b5fb76a63155")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR03")
 					(unit 1)
@@ -6542,7 +6532,7 @@
 			(uuid "e7b52abf-6b52-40f6-90c1-8b54c2d1fcf1")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "R7")
 					(unit 1)
@@ -6620,7 +6610,7 @@
 			(uuid "a6b07ed2-2875-433c-b955-6e908fecd6de")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR018")
 					(unit 1)
@@ -6697,7 +6687,7 @@
 			(uuid "7c4f4fa8-0d81-45a1-9b67-8f9dd722fce4")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#FLG04")
 					(unit 1)
@@ -6775,7 +6765,7 @@
 			(uuid "59290202-9a2c-40c1-96c9-a43e34ee36ec")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR09")
 					(unit 1)
@@ -6857,7 +6847,7 @@
 			(uuid "e25686dc-bf3d-4648-afa4-d2917153f713")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "R4")
 					(unit 1)
@@ -6936,7 +6926,7 @@
 			(uuid "db820d8a-3869-462d-bd04-4c3c84373479")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "C2")
 					(unit 1)
@@ -7014,7 +7004,7 @@
 			(uuid "cf5b2ea9-1c1e-461a-8490-87ffc82b0781")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR07")
 					(unit 1)
@@ -7127,7 +7117,7 @@
 			(uuid "fa9a0db3-9544-4d31-9b83-2efebcf58d11")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "SW1")
 					(unit 1)
@@ -7237,7 +7227,7 @@
 			(uuid "4a4b51b2-0254-4c88-80e0-dc195673a45b")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "Q1")
 					(unit 1)
@@ -7319,7 +7309,7 @@
 			(uuid "b5155105-945d-49d8-aec2-d4b3429fcf0e")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "C1")
 					(unit 1)
@@ -7397,7 +7387,7 @@
 			(uuid "484ef496-3ebe-4e2e-9d19-2136aae14a05")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#FLG01")
 					(unit 1)
@@ -7477,7 +7467,7 @@
 			(uuid "20f744e1-6b00-4be1-a19d-a606a2283f8d")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "C3")
 					(unit 1)
@@ -7598,7 +7588,7 @@
 			(uuid "5c53cc0e-6ba9-4a25-8771-a87bf97d3aaa")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "U2")
 					(unit 1)
@@ -7920,7 +7910,7 @@
 			(uuid "8bee58db-ca69-47a8-a5f0-0a4b3e35b87d")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "U1")
 					(unit 1)
@@ -7997,7 +7987,7 @@
 			(uuid "efa97ae8-8248-420f-977e-463d623a80d7")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#FLG03")
 					(unit 1)
@@ -8110,7 +8100,7 @@
 			(uuid "9f896d5a-fb80-4f0c-a686-8417964f476e")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "SW2")
 					(unit 1)
@@ -8189,7 +8179,7 @@
 			(uuid "d8d2536c-e00f-4b1b-b696-dbbcda9e5ad1")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR02")
 					(unit 1)
@@ -8267,7 +8257,7 @@
 			(uuid "32da7433-34f9-423c-b8fa-5bcec6ad3dc8")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR08")
 					(unit 1)
@@ -8345,7 +8335,7 @@
 			(uuid "cef111f4-79f3-4414-b5cb-bd824faf1025")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR01")
 					(unit 1)
@@ -8425,7 +8415,7 @@
 			(uuid "0afc6882-983d-47b2-9494-2a98b72a9930")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "BZ1")
 					(unit 1)
@@ -8505,7 +8495,7 @@
 			(uuid "5b7d14d4-3b09-4cfb-b85d-f8ecc7deb482")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "SW4")
 					(unit 1)
@@ -8583,7 +8573,7 @@
 			(uuid "c7588ef1-5750-4fab-a055-833ce8122018")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR05")
 					(unit 1)
@@ -8661,7 +8651,7 @@
 			(uuid "924c06c9-2aec-4a83-8d52-8e632d84efa1")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR011")
 					(unit 1)
@@ -8741,7 +8731,7 @@
 			(uuid "170fd1ef-e76b-4ea7-96b7-e6ce6d7c83af")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "SW3")
 					(unit 1)
@@ -8819,7 +8809,7 @@
 			(uuid "751a343a-4645-4199-90a0-31672a222c27")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR019")
 					(unit 1)
@@ -8942,7 +8932,7 @@
 			(uuid "610501f1-690d-4ff0-80da-59ec4f6fe483")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "DS2")
 					(unit 1)
@@ -9052,7 +9042,7 @@
 			(uuid "6d4270df-5b7d-4ded-a8d4-0b73ff38303e")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "Q2")
 					(unit 1)
@@ -9154,7 +9144,7 @@
 			(uuid "7e4ac99d-7a17-4fae-bf31-34f85f38c802")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "D1")
 					(unit 1)
@@ -9234,7 +9224,7 @@
 			(uuid "4c69c0d6-34c3-4502-b2bd-f14e698399f1")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "R3")
 					(unit 1)
@@ -9315,7 +9305,7 @@
 			(uuid "6c191ce5-7b96-4fdd-994d-a3d4bc426166")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "C4")
 					(unit 1)
@@ -9392,7 +9382,7 @@
 			(uuid "23f83233-61f6-445e-8689-3779e591cebb")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#FLG05")
 					(unit 1)
@@ -9470,7 +9460,7 @@
 			(uuid "e7dee08e-0a63-4805-88ac-2c6d28b17143")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR04")
 					(unit 1)
@@ -9585,7 +9575,7 @@
 			(uuid "f18cd306-a2ed-4d34-a380-1f3220b853be")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "R2")
 					(unit 1)
@@ -9664,7 +9654,7 @@
 			(uuid "7a4dcef9-0d9b-4734-be4a-1b20fdb2549d")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR014")
 					(unit 1)
@@ -9741,7 +9731,7 @@
 			(uuid "eb059df2-6130-4aed-ae6f-049c0b7be1fd")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "#PWR06")
 					(unit 1)
@@ -9859,7 +9849,7 @@
 			(uuid "557e8b6d-3c61-4c3e-93d4-87cfac6f2b7e")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "RV3")
 					(unit 1)
@@ -9975,7 +9965,7 @@
 			(uuid "24d9c220-5b8d-4793-be22-2aae3a78d242")
 		)
 		(instances
-			(project "termostat-v2"
+			(project "thermostat_v2"
 				(path "/ac78e03d-eaa5-43c4-8730-cba06800c7fc"
 					(reference "R1")
 					(unit 1)
