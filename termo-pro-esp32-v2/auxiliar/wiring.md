@@ -8,6 +8,7 @@
 - GPIO1 -> unconected;
 - GPIO2 -> unconected;
 - GPIO3 -> resistor -> 12mm LED button(+);
+- GPIO4 -> 12mm LED button(logic);
 - GPIO5 -> resistor -> green_led;
 - GPIO6 -> resistor -> red_led;
 - GPIO7 -> resistor -> PN2222A base;
