@@ -16,6 +16,7 @@
  * 5 V    → board VIN
  */
 #include <atomic>
+#include <string.h>
 #include <string>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -181,7 +182,6 @@ static void handle_error(uint8_t error)
 // IDF 5.x receive callback signature
 static void on_receive(const esp_now_recv_info_t* recv_info, const uint8_t*data, int len)
 {
-    (void)recv_info;
 
     if (len != (int)sizeof(esp_data_receive)) {
 
@@ -202,15 +202,16 @@ static void on_receive(const esp_now_recv_info_t* recv_info, const uint8_t*data,
         stop();
 
     }
+
 }
 
-static void on_sent(const esp_now_send_info_t *tx_info, esp_now_send_status_t status)
+static void on_sent(const uint8_t *mac_addr, esp_now_send_status_t status)
 {
 
     if (status == ESP_NOW_SEND_SUCCESS) {
 
         retry_counter = 0;
-
+        
     } else {
 
         handle_error(last_error);
