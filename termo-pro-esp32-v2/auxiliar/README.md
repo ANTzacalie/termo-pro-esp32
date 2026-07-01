@@ -59,7 +59,7 @@ I = U / R => I = (3.3 - 0.7(TB)) / 330 => I ~ 7.8 mA , so 330 ohm is enough to s
 - Capacitor values C1,C2 and C3:
 *C1 is the main capacitor that is positioned at the begining of the USB-C 5VDC, the value of 220uF is chosen to surpress current spikes for the general circuit(not the ESP32-C3-Supermini, not complete);
 *C3 is the main capacitor positioned close to the ESP32-C3 with a value of 470uF , this and C1 in combination is to surpress the current spikes of the ESP32-C3, as calculated by tge formula:
-C = I * dt / dV => C = 0.335A(spike current) * 0.0005s(500ms) / 0.3V(averge) => C = 558uF, this value is not easy to find so C3 is 470uF and C1 compensates, capacitor in paralel sum capacitance, so C1,3 = 690uF, that is enough;
+C = I * dt / dV => C = 0.335A(spike current) * 0.0005s(500us) / 0.3V(averge) => C = 558uF, this value is not easy to find so C3 is 470uF and C1 compensates, capacitor in paralel sum capacitance, so C1,3 = 690uF, that is enough;
 *C2 the 220nF capacitor si placed very close to the ESP32 5V(VIN) pin , this is used for bypass.
 
 Total Power Consumption(P = I x V) => 335mA x 5V + 80mA x 5V + 2x6mA x 0.3V + 200uA x 3.3V + 6.8mA x 1.5V => P =  2.089W ~ 2.1W
@@ -75,7 +75,7 @@ Total Power Consumption(P = I x V) => 335mA x 5V + 80mA x 5V + 2x6mA x 0.3V + 20
 - 10k RM65 Potentiometer for the display.
 - DHT11 raw module needs an 10k pull-up to 3.3V, so to be safe for GPIO.
 - Capacitors values C1,C2,C3 and C4:
-*C1&C3 ESP32WROOM32-NodeMCU32S has current spikes during WIFI operations to up to 500mA, calculated electrolithic capacitance is 750uF, so 680uF at the 5V VIN of the esp32 and 220uF at the USB-C 5VDC;
+*C1&C3 ESP32WROOM32-NodeMCU32S has current spikes during WIFI operations to up to 500mA, calculated electrolithic capacitance is 833uF, so 680uF at the 5V VIN of the esp32 and 220uF at the USB-C 5VDC;
 *C2 the 220nF capacitor si placed very close to the ESP32 5V(VIN) pin , this is used for bypass.
 *C4 another 220nF capacitor is again for bypass and stability of the DHT11 sensor.
 
