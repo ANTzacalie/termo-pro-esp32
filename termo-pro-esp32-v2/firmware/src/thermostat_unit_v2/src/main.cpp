@@ -353,7 +353,8 @@ extern "C" void app_main() {
     // ---- main task loop (TODO: add menu / button / display logic) ----
     while (true) {
 
-        vTaskDelay(pdMS_TO_TICKS(10));
+        vTaskDelay(pdMS_TO_TICKS(5000));
+        sensor.readTemperatureHumidity();
         lcd.print(sensor.getTemperature());
 
     }

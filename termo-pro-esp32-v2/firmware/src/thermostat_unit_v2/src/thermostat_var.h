@@ -12,7 +12,7 @@ static constexpr gpio_num_t BUTTON_B_PIN = GPIO_NUM_33;
 static constexpr gpio_num_t LDR_PIN = GPIO_NUM_34;
 
 // -------------------- LCD backlight PWM (LEDC) --------------------
-static constexpr gpio_num_t PWM_PIN_DISPLAY  = GPIO_NUM_12;
+static constexpr gpio_num_t PWM_PIN_DISPLAY  = GPIO_NUM_22;
 static constexpr uint32_t   LEDC_FREQ_HZ     = 5000;
 #define LEDC_CH_DISPLAY     LEDC_CHANNEL_0
 #define LEDC_SPEED_DISPLAY  LEDC_LOW_SPEED_MODE
