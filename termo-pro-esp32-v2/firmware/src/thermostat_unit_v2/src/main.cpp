@@ -30,7 +30,6 @@ auto_mode confort_mode;
 // ESP-NOW class static instance pointer (defined in thermostat.h)
 //local* local::instance = nullptr;
 
-
 // ============================================================
 //  PROGRAM INSTANCES
 // ============================================================
