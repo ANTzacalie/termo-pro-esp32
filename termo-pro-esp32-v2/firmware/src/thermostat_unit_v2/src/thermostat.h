@@ -16,7 +16,6 @@
 #include <time.h>
 #include <sys/time.h>
 
-// ---- kept Arduino-ecosystem libraries (user decision) ----
 #include "DHT.h"           // Adafruit DHT sensor library
 #include "LiquidCrystal.h" // Arduino LiquidCrystal (4-bit parallel)
 
@@ -39,9 +38,6 @@ DHT dht(DHTPIN, DHTTYPE);
 LiquidCrystal lcd(18, 19, 4, 14, 16, 17);
 
 
-// ============================================================
-//  SENSORS
-// ============================================================
 class sensors {
 
 public:
@@ -68,7 +64,7 @@ public:
 
         }
 
-        tempDHT11    = t;
+        tempDHT11     = t;
         humidityDHT11 = h;
 
     }
@@ -76,7 +72,7 @@ public:
     // Read raw 12-bit ADC value from LDR (GPIO34 / ADC1_CH6)
     void readPhotoresistorValue() {
 
-        //light = adc1_get_raw(LDR_ADC_CHANNEL);
+        light = adc1_get_raw(LDR_ADC_CHANNEL);
 
     }
 
@@ -93,10 +89,8 @@ private:
 } sensor;
 
 
-// ============================================================
 //  ERROR CODES  (shared between both units — keep in sync with
 //  the matching enum in main.cpp on the Starting Unit)
-// ============================================================
 typedef enum : uint8_t {
 
     UNIT_CK            = 0,
@@ -121,17 +115,13 @@ typedef enum : uint8_t {
 // ============================================================
 
 
-/*
 class local {
 
 public:
 
     static local* instance;
 
-    // ---- static trampoline callbacks (IDF 5.x signatures) ----
-
-    static void onReceive(const esp_now_recv_info_t* recv_info,
-                          const uint8_t* data, int len)
+    static void onReceive(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len)
     {
         (void)recv_info;
         if (instance) instance->onReceiveFinal(data, len);
@@ -157,21 +147,25 @@ public:
                 switch (pkt.UNIT_ERR) {
 
                     case UNIT_CK:
+                        lcd.clear();
                         lcd.setCursor(0, 0);
-                        lcd.print("SU CONNECTED    ");
+                        lcd.print("SU CONNECTED");
                         break;
 
                     case ERR_WATCHDOG_RESET:
+                        lcd.clear();
                         lcd.setCursor(0, 0);
                         lcd.print("RESTART SU NOW!");
                         break;
 
                     case ERR_BROWNOUT:
+                        lcd.clear();
                         lcd.setCursor(0, 0);
                         lcd.print("DROP.VOLT ERR SU");
                         break;
 
                     default:
+                        lcd.clear();
                         lcd.setCursor(0, 0);
                         lcd.print("UNKNOWN ERROR SU");
                         break;
@@ -190,10 +184,14 @@ public:
 
         // Unknown / wrong-length packet
         if (failed_receive < 10) {
+
             failed_receive++;
+
         } else {
+
             send(false);
             esp_restart();
+
         }
 
     }
@@ -224,9 +222,7 @@ public:
 
         data_send_pkt.execute = start;
         last_command = start;
-        esp_now_send(receiverMAC,
-                     (const uint8_t*)&data_send_pkt,
-                     sizeof(data_send_pkt));
+        esp_now_send(receiverMAC, (const uint8_t*)&data_send_pkt, sizeof(data_send_pkt));
 
     }
 
@@ -253,4 +249,3 @@ private:
 
 } command_now;
 
-*/

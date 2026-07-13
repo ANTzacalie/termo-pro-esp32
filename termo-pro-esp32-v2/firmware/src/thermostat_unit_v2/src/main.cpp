@@ -1,15 +1,13 @@
 #include "thermostat.h"
 
-// ============================================================
 //  GLOBAL DEFINITIONS  (extern declarations live in thermostat_var.h)
-// ============================================================
 
 // retry & safety
 int  counter        = 0;
 int  failed_receive = 0;
 bool last_command   = false;
 
-// receiver MAC — Starting Unit (replace with real MAC before flashing!)
+// Receiver MAC — Starting Unit (replace with real MAC before flashing!)
 uint8_t receiverMAC[6] = { 0xD4, 0x8A, 0xFC, 0xA2, 0xA0, 0xD8 };
 
 // time / day-night
@@ -28,11 +26,10 @@ int  record_flag     = 0;
 auto_mode confort_mode;
 
 // ESP-NOW class static instance pointer (defined in thermostat.h)
-//local* local::instance = nullptr;
+local* local::instance = nullptr;
 
-// ============================================================
+
 //  PROGRAM INSTANCES
-// ============================================================
 auto_mode program_auto;
 prog_1    program1;
 prog_2    program2;
@@ -41,9 +38,7 @@ prog_4    program4;
 basic     program0;
 
 
-// ============================================================
 //  LCD BACKLIGHT BRIGHTNESS THRESHOLDS  (12-bit ADC values)
-// ============================================================
 enum brightness_control : uint16_t {
 
     LOW_BC    = 1200,
@@ -56,10 +51,6 @@ enum brightness_control : uint16_t {
 
 };
 
-
-// ============================================================
-//  SOFT-RTC HELPERS
-// ============================================================
 
 // Set the internal RTC from explicit hour/minute/weekday values.
 // Uses a fixed dummy date (Mon 1 Jan 2024) shifted by weekday offset.
@@ -94,15 +85,12 @@ static void read_time(int &h, int &m, int &weekday) {
 
     h       = ti.tm_hour;
     m       = ti.tm_min;
-    weekday = (ti.tm_wday == 0) ? 7 : ti.tm_wday; // Sun=0 → 7
+    weekday = (ti.tm_wday == 0) ? 7 : ti.tm_wday; // Sun=0 -> 7
 
 }
 
 
-// ============================================================
 //  START / STOP LOGIC
-// ============================================================
-
 // Returns 1 and sets record_flag=1 when heating should start.
 int check_for_start(float current_temp, float start_temp) {
 
@@ -126,10 +114,7 @@ int check_for_stop(float current_temp, float stop_temp) {
 }
 
 
-// ============================================================
-//  CUSTOM LCD CHARACTERS
-// ============================================================
-
+//  CUSTOM LCD CHARACTERS(ARROW UP)
 static uint8_t arrowUp[8] = {
 
     0b00100,
@@ -151,9 +136,7 @@ static void clearArrowAt(int col, int row) {
 }
 
 
-// ============================================================
 //  NVS STORAGE  (Preferences wrapper — bodies stubbed, fill later)
-// ============================================================
 class data {
 
 private:
@@ -184,14 +167,13 @@ public:
             return;
         }
 
-        // TODO: persist program temps, day_start, night_start, comfort_factor
+        //   TODO: persist program temps, day_start, night_start, comfort_factor
         //   example:
         //   nvs_set_i32(nvs_handle, "day_start",   day_start);
         //   nvs_set_i32(nvs_handle, "night_start",  night_start);
         //   nvs_set_blob(nvs_handle, "p0_start", &program0.START_TEMP, sizeof(float));
         //   ...
         //   nvs_commit(nvs_handle);
-
         nvs_close(nvs_handle);
 
     }
@@ -200,7 +182,7 @@ private:
 
     void load() {
 
-        // TODO: restore saved values from NVS
+        //   TODO: restore saved values from NVS
         //   example:
         //   int32_t v = 5;
         //   nvs_get_i32(nvs_handle, "day_start", &v);
@@ -212,34 +194,29 @@ private:
 } storage;
 
 
-// ============================================================
 //  HARDWARE INIT HELPERS
-// ============================================================
-
 static void gpio_buttons_init() {
 
-    // Button A
-    gpio_set_direction(BUTTON_A_PIN, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(BUTTON_A_PIN, GPIO_PULLUP_ONLY);
+    gpio_set_direction(BUTTON_UP_PIN, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(BUTTON_UP_PIN, GPIO_PULLUP_ONLY);
 
-    // Button B
-    gpio_set_direction(BUTTON_B_PIN, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(BUTTON_B_PIN, GPIO_PULLUP_ONLY);
+    gpio_set_direction(BUTTON_DOWN_PIN, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(BUTTON_DOWN_PIN, GPIO_PULLUP_ONLY);
+
+    gpio_set_direction(BUTTON_MENU_PIN, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(BUTTON_MENU_PIN, GPIO_PULLUP_ONLY);
+
+    gpio_set_direction(BUTTON_SAVE_PIN, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(BUTTON_SAVE_PIN, GPIO_PULLUP_ONLY);
 
 }
 
-/*
 static void adc_ldr_init() {
 
-    // ADC1 width: 12-bit (matches original analogReadResolution(12))
     adc1_config_width(ADC_WIDTH_BIT_12);
-
-    // GPIO34 = ADC1_CH6; 11 dB attenuation → full 0-3.3 V range
-    // (matches original analogSetPinAttenuation(ldrPin, ADC_11db))
     adc1_config_channel_atten(LDR_ADC_CHANNEL, ADC_ATTEN_DB_12);
 
 }
-*/
 
 static void ledc_backlight_init() {
 
@@ -287,9 +264,8 @@ static void wifi_espnow_init() {
         esp_restart();
     }
 
-    // IDF 5.x receive callback uses esp_now_recv_info_t*
-    //ESP_ERROR_CHECK(esp_now_register_recv_cb(local::onReceive));
-    //ESP_ERROR_CHECK(esp_now_register_send_cb(local::onSent));
+    ESP_ERROR_CHECK(esp_now_register_recv_cb(local::onReceive));
+    ESP_ERROR_CHECK(esp_now_register_send_cb(local::onSent));
 
     esp_now_peer_info_t peer = {};
     memcpy(peer.peer_addr, receiverMAC, 6);
@@ -299,19 +275,16 @@ static void wifi_espnow_init() {
 
 }
 
-
-// ============================================================
-//  APP MAIN  (replaces Arduino setup() + loop())
-// ============================================================
+// MAIN
 extern "C" void app_main() {
 
     // ---- static ESP-NOW handler instance ----
-    //static local command;
-    //local::instance = &command;
+    static local command;
+    local::instance = &command;
 
     // ---- peripheral init ----
     gpio_buttons_init();
-    //adc_ldr_init();
+    adc_ldr_init();
     ledc_backlight_init();
 
     // ---- Wi-Fi + ESP-NOW ----
@@ -349,9 +322,11 @@ extern "C" void app_main() {
 
     lcd.clear();
 
-    // ---- main task loop (TODO: add menu / button / display logic) ----
     while (true) {
 
+        /*
+                TEST
+        */
         vTaskDelay(pdMS_TO_TICKS(5000));
         sensor.readTemperatureHumidity();
         lcd.print(sensor.getTemperature());

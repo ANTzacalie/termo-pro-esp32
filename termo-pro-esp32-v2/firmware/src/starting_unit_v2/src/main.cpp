@@ -262,7 +262,6 @@ static void gpio_init_all()
 
     };
 
-
     gpio_config(&out_cfg);
 
     // safe defaults

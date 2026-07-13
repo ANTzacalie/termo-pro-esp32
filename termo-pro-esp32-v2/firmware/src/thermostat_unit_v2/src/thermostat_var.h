@@ -3,12 +3,13 @@
 #include "driver/gpio.h"
 
 // -------------------- Button GPIO pins --------------------
-static constexpr gpio_num_t BUTTON_A_PIN = GPIO_NUM_32;
-static constexpr gpio_num_t BUTTON_B_PIN = GPIO_NUM_33;
+static constexpr gpio_num_t BUTTON_UP_PIN   = GPIO_NUM_26;
+static constexpr gpio_num_t BUTTON_DOWN_PIN = GPIO_NUM_27;
+static constexpr gpio_num_t BUTTON_MENU_PIN = GPIO_NUM_25;
+static constexpr gpio_num_t BUTTON_SAVE_PIN = GPIO_NUM_23;
 
 // -------------------- Photoresistor (ADC) --------------------
 // ADC1 channel 6 = GPIO34 on WROOM-32 (input-only pin, no pull)
-//.......................TODO...................................
 static constexpr gpio_num_t LDR_PIN = GPIO_NUM_34;
 
 // -------------------- LCD backlight PWM (LEDC) --------------------
@@ -34,7 +35,7 @@ extern int night_start;  // e.g. 21 (21:00)
 // -------------------- Soft-RTC shadow --------------------
 extern int hour;
 extern int minute;
-extern int day;          // weekday 1-7 (Mon=1, Sun=7)
+extern int day;    // weekday 1-7 (Mon=1, Sun=7)
 
 // -------------------- Program selector --------------------
 extern int  program_choice;
@@ -172,9 +173,8 @@ private:
 extern auto_mode confort_mode;
 
 
-// ============================================================
 //  SEASONAL PROGRAMS  (START_TEMP / STOP_TEMP set at runtime)
-// ============================================================
+
 class prog_1 {
 public:
     float START_TEMP = 0;
