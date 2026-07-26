@@ -1,8 +1,9 @@
 #pragma once
 
-// ---- IDF core ----
+// IDF core
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_adc/adc_oneshot.h"
 #include "driver/gpio.h"
 #include "driver/ledc.h"
 #include "esp_now.h"
@@ -12,14 +13,14 @@
 #include "nvs_flash.h"
 #include "nvs.h"
 
-// ---- time ----
+// time
 #include <time.h>
 #include <sys/time.h>
 
 #include "DHT.h"           // Adafruit DHT sensor library
 #include "LiquidCrystal.h" // Arduino LiquidCrystal (4-bit parallel)
 
-// ---- project header ----
+// project header
 #include "thermostat_var.h"
 
 static const char* TAG_TH = "LOG[TH]";
@@ -37,6 +38,66 @@ DHT dht(DHTPIN, DHTTYPE);
 // ============================================================
 LiquidCrystal lcd(18, 19, 4, 14, 16, 17);
 
+// Backlight PMW DutyCycle etc...
+static void ledc_backlight_init() {
+    
+    ledc_timer_config_t timer = {};
+    timer.speed_mode      = LEDC_SPEED_DISPLAY;
+    timer.timer_num       = LEDC_TIMER_DISPLAY;
+    timer.duty_resolution = LEDC_RESOLUTION;
+    timer.freq_hz         = LEDC_FREQ_HZ;
+    timer.clk_cfg         = LEDC_AUTO_CLK;
+    ledc_timer_config(&timer);
+
+    ledc_channel_config_t ch = {};
+    ch.speed_mode = LEDC_SPEED_DISPLAY;
+    ch.channel    = LEDC_CH_DISPLAY;
+    ch.timer_sel  = LEDC_TIMER_DISPLAY;
+    ch.gpio_num   = PWM_PIN_DISPLAY;
+    ch.duty       = 0;
+    ch.hpoint     = 0;
+    ledc_channel_config(&ch);
+
+}
+
+
+static void lcd_row_sel(int select) {
+
+    lcd.setCursor(0 , select);
+
+}
+
+static void clear_char_pos(int col, int row) {
+
+    lcd.setCursor(col, row);
+    lcd.print(" ");
+
+}
+
+static void delay_s(uint32_t ms) {
+
+    vTaskDelay(pdMS_TO_TICKS(ms));
+
+}
+
+// LDR handler
+static adc_oneshot_unit_handle_t adc1_handle;
+
+// LDR init
+static void adc_ldr_init() {
+
+    adc_oneshot_unit_init_cfg_t init_cfg = {
+        .unit_id = ADC_UNIT_1,
+    };
+    adc_oneshot_new_unit(&init_cfg, &adc1_handle);
+
+    adc_oneshot_chan_cfg_t chan_cfg = {
+        .atten = ADC_ATTEN_DB_12,
+        .bitwidth = ADC_BITWIDTH_12,
+    };
+    adc_oneshot_config_channel(adc1_handle, ADC_CHANNEL_6, &chan_cfg);
+
+}
 
 class sensors {
 
@@ -57,7 +118,7 @@ public:
 
         if (isnan(h) || isnan(t)) {
 
-            lcd.setCursor(0, 0);
+            lcd_row_sel(0);
             lcd.print("TEMP_READ_ERR");
             ESP_LOGE(TAG_TH, "DHT11 read failed");
             return;
@@ -72,7 +133,9 @@ public:
     // Read raw 12-bit ADC value from LDR (GPIO34 / ADC1_CH6)
     void readPhotoresistorValue() {
 
-        light = adc1_get_raw(LDR_ADC_CHANNEL);
+        int raw = 0;
+        adc_oneshot_read(adc1_handle, ADC_CHANNEL_6, &raw);
+        light = raw;
 
     }
 
@@ -89,9 +152,10 @@ private:
 } sensor;
 
 
-//  ERROR CODES  (shared between both units — keep in sync with
-//  the matching enum in main.cpp on the Starting Unit)
-typedef enum : uint8_t {
+// ERROR CODES  (shared between both units — keep in sync with
+// the matching enum in main.cpp on the Starting Unit)
+typedef enum : uint8_t 
+{
 
     UNIT_CK            = 0,
     // communication
@@ -114,7 +178,6 @@ typedef enum : uint8_t {
 //    SU  → TH : esp_data_sensor { SENSOR_CK, EXT_TEMP_VAL  }  [TODO]
 // ============================================================
 
-
 class local {
 
 public:
@@ -127,13 +190,13 @@ public:
         if (instance) instance->onReceiveFinal(data, len);
     }
 
-    // IDF 5.x send callback — uses esp_now_send_info_t* (not raw mac pointer)
+    // IDF 5.x send callback
     static void onSent(const esp_now_send_info_t* send_info,esp_now_send_status_t status)
     {
-        if (instance) instance->onSentFinal(send_info, status);
+        if (instance) instance->onSentFinal(*send_info, status);
     }
 
-    // ---- receive handler ----
+    // receive handler
     void onReceiveFinal(const uint8_t* data, int len) {
 
         // Handle esp_data_state packet (SU boot / error report)
@@ -148,25 +211,25 @@ public:
 
                     case UNIT_CK:
                         lcd.clear();
-                        lcd.setCursor(0, 0);
+                        lcd_row_sel(0);
                         lcd.print("SU CONNECTED");
                         break;
 
                     case ERR_WATCHDOG_RESET:
                         lcd.clear();
-                        lcd.setCursor(0, 0);
+                        lcd_row_sel(0);
                         lcd.print("RESTART SU NOW!");
                         break;
 
                     case ERR_BROWNOUT:
                         lcd.clear();
-                        lcd.setCursor(0, 0);
+                        lcd_row_sel(0);
                         lcd.print("DROP.VOLT ERR SU");
                         break;
 
                     default:
                         lcd.clear();
-                        lcd.setCursor(0, 0);
+                        lcd_row_sel(0);
                         lcd.print("UNKNOWN ERROR SU");
                         break;
 
@@ -196,7 +259,7 @@ public:
 
     }
 
-    // ---- send-confirm handler ----
+    // send-confirm handler
     void onSentFinal(const esp_now_send_info_t, esp_now_send_status_t status) {
 
         if (status == ESP_NOW_SEND_SUCCESS) {
@@ -217,7 +280,7 @@ public:
 
     }
 
-    // ---- public send ----
+    // public send 
     void send(bool start) {
 
         data_send_pkt.execute = start;
@@ -228,7 +291,7 @@ public:
 
 private:
 
-    // Outgoing: command to Starting Unit
+    // Outgoing: command to Starting_Unit
     struct [[gnu::packed]] esp_data_send {
         bool execute;
     };
@@ -249,3 +312,122 @@ private:
 
 } command_now;
 
+static void wifi_espnow_init() {
+
+    // NVS storage check
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
+        ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        nvs_flash_erase();
+        nvs_flash_init();
+    }
+
+    // check for TCP/IP stack errors and init
+    ESP_ERROR_CHECK(esp_netif_init());
+
+    // checks for memory loop errors and init
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+    // WIFI init and error check
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+    ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+    ESP_ERROR_CHECK(esp_wifi_start());
+
+    // ---- ESP-NOW ----
+    if (esp_now_init() != ESP_OK) {
+        ESP_LOGE(TAG_TH, "esp_now_init failed — restarting");
+        esp_restart();
+    }
+
+    // registers onReceive and onSent from class local
+    ESP_ERROR_CHECK(esp_now_register_recv_cb(local::onReceive));
+    ESP_ERROR_CHECK(esp_now_register_send_cb(local::onSent));
+
+    // Peer setup, channel and enctyption[-- AES128 based --]
+    esp_now_peer_info_t peer = {};
+    memcpy(peer.peer_addr, receiverMAC, 6);
+    peer.channel = 0;
+    peer.encrypt = true;
+    ESP_ERROR_CHECK(esp_now_add_peer(&peer));
+
+}
+
+static void gpio_buttons_init() {
+
+    // UP
+    gpio_set_direction(BUTTON_UP_PIN  , GPIO_MODE_INPUT );
+    gpio_set_pull_mode(BUTTON_UP_PIN  , GPIO_PULLUP_ONLY);
+
+    // DOWN
+    gpio_set_direction(BUTTON_DOWN_PIN, GPIO_MODE_INPUT );
+    gpio_set_pull_mode(BUTTON_DOWN_PIN, GPIO_PULLUP_ONLY);
+
+    // MENIU
+    gpio_set_direction(BUTTON_MENU_PIN, GPIO_MODE_INPUT );
+    gpio_set_pull_mode(BUTTON_MENU_PIN, GPIO_PULLUP_ONLY);
+
+    // SAVE
+    gpio_set_direction(BUTTON_SAVE_PIN, GPIO_MODE_INPUT );
+    gpio_set_pull_mode(BUTTON_SAVE_PIN, GPIO_PULLUP_ONLY);
+
+}
+
+
+//  NVS STORAGE  (Preferences wrapper — bodies stubbed, fill later)
+class data {
+
+private:
+    nvs_handle_t nvs_handle = 0;
+
+public:
+
+    // Call once at boot — opens NVS namespace and loads saved values.
+    void begin() {
+
+        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
+        if (err != ESP_OK) {
+            ESP_LOGE(TAG_TH, "NVS open failed: %s", esp_err_to_name(err));
+            return;
+        }
+
+        load();
+        nvs_close(nvs_handle);
+
+    }
+
+    // Call whenever the user changes a program value.
+    void save() {
+
+        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
+        if (err != ESP_OK) {
+            ESP_LOGE(TAG_TH, "NVS open (save) failed: %s", esp_err_to_name(err));
+            return;
+        }
+
+        //   TODO: persist program temps, day_start, night_start, comfort_factor
+        //   example:
+        //   nvs_set_i32(nvs_handle, "day_start",   day_start);
+        //   nvs_set_i32(nvs_handle, "night_start",  night_start);
+        //   nvs_set_blob(nvs_handle, "p0_start", &program0.START_TEMP, sizeof(float));
+        //   ...
+        //   nvs_commit(nvs_handle);
+        nvs_close(nvs_handle);
+
+    }
+
+private:
+
+    void load() {
+
+        //   TODO: restore saved values from NVS
+        //   example:
+        //   int32_t v = 5;
+        //   nvs_get_i32(nvs_handle, "day_start", &v);
+        //   day_start = v;
+        //   ...
+
+    }
+
+} storage;

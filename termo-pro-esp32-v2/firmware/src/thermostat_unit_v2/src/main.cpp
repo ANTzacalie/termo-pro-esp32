@@ -37,7 +37,6 @@ prog_3    program3;
 prog_4    program4;
 basic     program0;
 
-
 //  LCD BACKLIGHT BRIGHTNESS THRESHOLDS  (12-bit ADC values)
 enum brightness_control : uint16_t {
 
@@ -85,7 +84,7 @@ static void read_time(int &h, int &m, int &weekday) {
 
     h       = ti.tm_hour;
     m       = ti.tm_min;
-    weekday = (ti.tm_wday == 0) ? 7 : ti.tm_wday; // Sun=0 -> 7
+    weekday = (ti.tm_wday == 0) ? 7 : ti.tm_wday; // Sun = 0 -> 7
 
 }
 
@@ -128,198 +127,77 @@ static uint8_t arrowUp[8] = {
 
 };
 
-static void clearArrowAt(int col, int row) {
+void splash_1() {
 
-    lcd.setCursor(col, row);
-    lcd.print(" ");
+    // splash screen 
+    lcd_row_sel(0);
+    lcd.print("TermoPro v2.0");
+    lcd_row_sel(1);
+    lcd.print("by ANTzacalie");
+    delay_s(3000);
 
-}
-
-
-//  NVS STORAGE  (Preferences wrapper — bodies stubbed, fill later)
-class data {
-
-private:
-    nvs_handle_t nvs_handle = 0;
-
-public:
-
-    // Call once at boot — opens NVS namespace and loads saved values.
-    void begin() {
-
-        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
-        if (err != ESP_OK) {
-            ESP_LOGE(TAG_TH, "NVS open failed: %s", esp_err_to_name(err));
-            return;
-        }
-
-        load();
-        nvs_close(nvs_handle);
-
-    }
-
-    // Call whenever the user changes a program value.
-    void save() {
-
-        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
-        if (err != ESP_OK) {
-            ESP_LOGE(TAG_TH, "NVS open (save) failed: %s", esp_err_to_name(err));
-            return;
-        }
-
-        //   TODO: persist program temps, day_start, night_start, comfort_factor
-        //   example:
-        //   nvs_set_i32(nvs_handle, "day_start",   day_start);
-        //   nvs_set_i32(nvs_handle, "night_start",  night_start);
-        //   nvs_set_blob(nvs_handle, "p0_start", &program0.START_TEMP, sizeof(float));
-        //   ...
-        //   nvs_commit(nvs_handle);
-        nvs_close(nvs_handle);
-
-    }
-
-private:
-
-    void load() {
-
-        //   TODO: restore saved values from NVS
-        //   example:
-        //   int32_t v = 5;
-        //   nvs_get_i32(nvs_handle, "day_start", &v);
-        //   day_start = v;
-        //   ...
-
-    }
-
-} storage;
-
-
-//  HARDWARE INIT HELPERS
-static void gpio_buttons_init() {
-
-    gpio_set_direction(BUTTON_UP_PIN, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(BUTTON_UP_PIN, GPIO_PULLUP_ONLY);
-
-    gpio_set_direction(BUTTON_DOWN_PIN, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(BUTTON_DOWN_PIN, GPIO_PULLUP_ONLY);
-
-    gpio_set_direction(BUTTON_MENU_PIN, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(BUTTON_MENU_PIN, GPIO_PULLUP_ONLY);
-
-    gpio_set_direction(BUTTON_SAVE_PIN, GPIO_MODE_INPUT);
-    gpio_set_pull_mode(BUTTON_SAVE_PIN, GPIO_PULLUP_ONLY);
+    lcd.clear();
+    lcd_row_sel(0);
+    lcd.print("For bugs go to");
+    lcd_row_sel(1);
+    lcd.print("---- GitHub ----");
+    delay_s(1000);
 
 }
 
-static void adc_ldr_init() {
+void splash_2() {
 
-    adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(LDR_ADC_CHANNEL, ADC_ATTEN_DB_12);
+    lcd_row_sel(0);
+    lcd.print(" TermoPro v2.0 ");
 
-}
+    
+    for(int i = 0; i < 16; i+=1) {
 
-static void ledc_backlight_init() {
+        lcd.setCursor(i, 1);
+        lcd.print(".");
+        delay_s(200);
 
-    ledc_timer_config_t timer = {};
-    timer.speed_mode      = LEDC_SPEED_DISPLAY;
-    timer.timer_num       = LEDC_TIMER_DISPLAY;
-    timer.duty_resolution = LEDC_RESOLUTION;
-    timer.freq_hz         = LEDC_FREQ_HZ;
-    timer.clk_cfg         = LEDC_AUTO_CLK;
-    ledc_timer_config(&timer);
-
-    ledc_channel_config_t ch = {};
-    ch.speed_mode = LEDC_SPEED_DISPLAY;
-    ch.channel    = LEDC_CH_DISPLAY;
-    ch.timer_sel  = LEDC_TIMER_DISPLAY;
-    ch.gpio_num   = PWM_PIN_DISPLAY;
-    ch.duty       = 0;
-    ch.hpoint     = 0;
-    ledc_channel_config(&ch);
-
-}
-
-static void wifi_espnow_init() {
-
-    // NVS required by Wi-Fi driver (may already be init'd; ignore if so)
-    esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
-        ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        nvs_flash_erase();
-        nvs_flash_init();
     }
-
-    ESP_ERROR_CHECK(esp_netif_init());
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-    ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
-    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-    ESP_ERROR_CHECK(esp_wifi_start());
-
-    // ---- ESP-NOW ----
-    if (esp_now_init() != ESP_OK) {
-        ESP_LOGE(TAG_TH, "esp_now_init failed — restarting");
-        esp_restart();
-    }
-
-    ESP_ERROR_CHECK(esp_now_register_recv_cb(local::onReceive));
-    ESP_ERROR_CHECK(esp_now_register_send_cb(local::onSent));
-
-    esp_now_peer_info_t peer = {};
-    memcpy(peer.peer_addr, receiverMAC, 6);
-    peer.channel = 0;
-    peer.encrypt = false;
-    ESP_ERROR_CHECK(esp_now_add_peer(&peer));
 
 }
 
 // MAIN
 extern "C" void app_main() {
 
-    // ---- static ESP-NOW handler instance ----
+    // static ESP-NOW handler instance 
     static local command;
     local::instance = &command;
 
-    // ---- peripheral init ----
+    // peripheral init 
     gpio_buttons_init();
     adc_ldr_init();
     ledc_backlight_init();
 
-    // ---- Wi-Fi + ESP-NOW ----
+    // Wi-Fi + ESP-NOW 
     wifi_espnow_init();
 
-    // ---- DHT11 ----
+    // DHT11 
     dht.begin();
 
-    // ---- LCD ----
+    // LCD 
     lcd.begin(16, 2);
     lcd.clear();
+    // custom arrow_up loaded into display
     lcd.createChar(0, arrowUp);
 
-    // ---- initial brightness ----
+    // initial brightness 
     sensor.setBrightness(150);
 
-    // ---- NVS / preferences ----
+    // NVS / preferences 
     storage.begin();
 
-    vTaskDelay(pdMS_TO_TICKS(500)); // stabilization
+    delay_s(500); // stabilization
 
-    // ---- splash screen ----
-    lcd.setCursor(0, 0);
-    lcd.print("TermoPro v2.0");
-    lcd.setCursor(0, 1);
-    lcd.print("by ANTzacalie");
-    vTaskDelay(pdMS_TO_TICKS(3000));
-
+    splash_1();
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("For bugs: Git");
-    lcd.setCursor(0, 1);
-    lcd.print("Sys: 1, WIFI: 1");
-    vTaskDelay(pdMS_TO_TICKS(3000));
+    splash_2();
 
+    delay_s(1000);
     lcd.clear();
 
     while (true) {
@@ -327,7 +205,7 @@ extern "C" void app_main() {
         /*
                 TEST
         */
-        vTaskDelay(pdMS_TO_TICKS(5000));
+        delay_s(5000);
         sensor.readTemperatureHumidity();
         lcd.print(sensor.getTemperature());
 
