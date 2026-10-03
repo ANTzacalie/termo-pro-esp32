@@ -174,7 +174,11 @@ extern auto_mode confort_mode;
 
 
 //  SEASONAL PROGRAMS  (START_TEMP / STOP_TEMP set at runtime)
+/*
 
+    TODO: ADV. PROGRAM SET TBD
+
+*/
 class prog_1 {
 public:
     float START_TEMP = 0;

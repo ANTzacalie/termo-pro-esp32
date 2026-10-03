@@ -74,7 +74,7 @@ static void set_time(int h, int m, int weekday) {
     settimeofday(&tv, nullptr);
 
 }
-
+ 
 // Read current time back from the internal RTC.
 static void read_time(int &h, int &m, int &weekday) {
 
@@ -88,8 +88,6 @@ static void read_time(int &h, int &m, int &weekday) {
 
 }
 
-
-//  START / STOP LOGIC
 // Returns 1 and sets record_flag=1 when heating should start.
 int check_for_start(float current_temp, float start_temp) {
 
@@ -127,6 +125,7 @@ static uint8_t arrowUp[8] = {
 
 };
 
+// Initial splash screen
 void splash_1() {
 
     // splash screen 
@@ -141,15 +140,15 @@ void splash_1() {
     lcd.print("For bugs go to");
     lcd_row_sel(1);
     lcd.print("---- GitHub ----");
-    delay_s(1000);
+    delay_s(1800);
 
 }
 
+// Secondary splash screen
 void splash_2() {
 
     lcd_row_sel(0);
     lcd.print(" TermoPro v2.0 ");
-
     
     for(int i = 0; i < 16; i+=1) {
 
@@ -205,6 +204,7 @@ extern "C" void app_main() {
         /*
                 TEST
         */
+
         delay_s(5000);
         sensor.readTemperatureHumidity();
         lcd.print(sensor.getTemperature());
