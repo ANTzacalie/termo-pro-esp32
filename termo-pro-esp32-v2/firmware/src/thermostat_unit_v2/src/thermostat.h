@@ -426,29 +426,6 @@ public:
             return;
         }
 
-        //   TODO: persist program temps, day_start, night_start, comfort_factor
-        //   example:
-        //   nvs_set_i32(nvs_handle, "day_start",   day_start);
-        //   nvs_set_i32(nvs_handle, "night_start",  night_start);
-        //   nvs_set_blob(nvs_handle, "p0_start", &program0.START_TEMP, sizeof(float));
-        //   ...
-        //   nvs_commit(nvs_handle);
-        /*
-
-bool last_command;
-uint8_t receiverMAC[6];
-int day_start;    
-int night_start;
-int hour;
-int minute;
-int day; 
-int  program_choice;
-long int ntc_room_day = 0;
-long int ntc_room_night = 0;
-
-// + program data for all
-
-*/
         nvs_set_i8(nvs_handle,  "l_cmd", last_command ? 1 : 0);
         nvs_set_blob(nvs_handle,"rec_mac", receiverMAC, sizeof(receiverMAC));
         nvs_set_i32(nvs_handle, "day_s", day_start);
@@ -460,16 +437,24 @@ long int ntc_room_night = 0;
         nvs_set_i32(nvs_handle, "ntc_r_d", confort_mode.ntc_room_day);
         nvs_set_i32(nvs_handle, "ntc_r_n", confort_mode.ntc_room_night);
 
-        for(int i = 0; i < 5; i++) {
-
-
-
-        }
-
-
+        save_programs();
         nvs_commit(nvs_handle);
         nvs_close(nvs_handle);
 
+    }
+
+    void save_programs() {
+
+        nvs_set_blob(nvs_handle, "st_temp_p1", &program1.START_TEMP, sizeof(program1.START_TEMP));
+        nvs_set_blob(nvs_handle, "sp_temo_p1", &program1.STOP_TEMP,  sizeof(program1.STOP_TEMP));
+        nvs_set_blob(nvs_handle, "st_temp_p2", &program2.START_TEMP, sizeof(program2.START_TEMP));
+        nvs_set_blob(nvs_handle, "sp_temo_p2", &program2.STOP_TEMP,  sizeof(program2.STOP_TEMP));
+        nvs_set_blob(nvs_handle, "st_temp_p3", &program3.START_TEMP, sizeof(program3.START_TEMP));
+        nvs_set_blob(nvs_handle, "sp_temo_p4", &program3.STOP_TEMP,  sizeof(program3.STOP_TEMP));
+        nvs_set_blob(nvs_handle, "st_temp_p4", &program4.START_TEMP, sizeof(program4.START_TEMP));
+        nvs_set_blob(nvs_handle, "sp_temo_p4", &program4.STOP_TEMP,  sizeof(program4.STOP_TEMP));
+        nvs_set_blob(nvs_handle, "st_temp_p_auto", &program_auto.START_TEMP, sizeof(program_auto.START_TEMP));
+        nvs_set_blob(nvs_handle, "sp_temo_p_auto", &program_auto.STOP_TEMP,  sizeof(program_auto.STOP_TEMP));
     }
 
 private:
@@ -486,3 +471,4 @@ private:
     }
 
 } storage;
+

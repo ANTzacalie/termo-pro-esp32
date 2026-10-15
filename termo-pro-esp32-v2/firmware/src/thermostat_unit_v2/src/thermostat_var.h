@@ -55,7 +55,7 @@ class auto_mode {
 public:
 
     float START_TEMP = 0;
-    float END_TEMP   = 0;
+    float STOP_TEMP  = 0;
 
     const int reset_adjustment = 7;
     int       day_increment    = 0;

@@ -37,6 +37,8 @@ static constexpr gpio_num_t M_PIN_BTN      = GPIO_NUM_4;   // manual_start_butto
 static constexpr gpio_num_t PIN_LED_GREEN  = GPIO_NUM_5;   // ON LED;
 static constexpr gpio_num_t PIN_LED_RED    = GPIO_NUM_6;   // OFF LED;
 static constexpr gpio_num_t PIN_TRANSISTOR = GPIO_NUM_7;   // PN2222A base -> RELAY;
+int sensor_ck = 0;
+float sensor_temp = 0.0f;
 
 // ### ESP-NOW PEER  (replace with real MAC before flashing!) ##################
 static uint8_t receiver_mac[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -60,12 +62,8 @@ struct [[gnu::packed]] esp_data_receive {
     bool execute;
 };
 
-struct [[gnu::packed]] esp_data_state {
-    bool    SETUP_UNIT_CK;
+struct [[gnu::packed]] esp_data_sensor {
     uint8_t UNIT_ERR;
-};
-
-struct [[gnu::packed]] esp_data_sensor { // IMPLEMENT LOGIC ON THE THERMOSTAT UNIT SIDE AND ALSO EXT_SENSOR LOGIC HERE;
     uint8_t SENSOR_CK;
     float   EXT_TEMP_VAL;
 };
@@ -137,16 +135,11 @@ static void stop()
 }
 
 // ### ESP-NOW SEND ############################################################
-static void espnow_send(uint8_t error)
+static void send(uint8_t error, uint8_t sensor_ck, float ext_temp)
 {
-
-    /*
-    
-        MODIFIED FOR 2 different packet types
-    
-    */
-    data_sent.SETUP_UNIT_CK = true;
-    data_sent.UNIT_ERR      = error;
+    data_sent.UNIT_ERR = error;
+    data_sent.SENSOR_CK = sensor_ck;
+    data_sent.EXT_TEMP_VAL = ext_temp;
 
     esp_err_t ret = esp_now_send(receiver_mac, (const uint8_t*)&data_sent, sizeof(data_sent));
     if (ret != ESP_OK) {
@@ -310,7 +303,7 @@ static void wifi_espnow_init()
     esp_now_peer_info_t peer = {};
     memcpy(peer.peer_addr, receiver_mac, 6);
     peer.channel = 0;
-    peer.encrypt = false;
+    peer.encrypt = true; // AES128 encryption
     ESP_ERROR_CHECK(esp_now_add_peer(&peer));
 
 }
@@ -326,7 +319,8 @@ void manual_start(void *p) {
 
                 manual_ovveride = true;
                 aux_button_led_on();
-                
+                send(1, sensor_ck, sensor_temp);
+
                 if(!is_on.load())
                     set_load(true, 1);
 

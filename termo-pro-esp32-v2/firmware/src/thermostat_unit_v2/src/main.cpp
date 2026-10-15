@@ -200,7 +200,7 @@ extern "C" void app_main() {
     while (true) {
 
         /*
-                TEST
+            MAKE THE INTERFACE
         */
 
     }
