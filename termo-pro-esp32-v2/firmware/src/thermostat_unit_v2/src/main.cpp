@@ -3,8 +3,6 @@
 //  GLOBAL DEFINITIONS  (extern declarations live in thermostat_var.h)
 
 // retry & safety
-int  counter        = 0;
-int  failed_receive = 0;
 bool last_command   = false;
 
 // Receiver MAC — Starting Unit (replace with real MAC before flashing!)
@@ -40,12 +38,12 @@ basic     program0;
 //  LCD BACKLIGHT BRIGHTNESS THRESHOLDS  (12-bit ADC values)
 enum brightness_control : uint16_t {
 
-    LOW_BC    = 1200,
-    LOW_H_BC  = 1800,
-    MEDIUM_BC = 2400,
-    INTER_NC  = 2900,
-    HIGH_BC   = 3400,
-    ULTRA_BC  = 3800,
+    LOW_BC     = 1200,
+    LOW_H_BC   = 1800,
+    MEDIUM_BC  = 2400,
+    INTER_NC   = 2900,
+    HIGH_BC    = 3400,
+    ULTRA_BC   = 3800,
     ULTRA_H_BC = 4000
 
 };
@@ -204,10 +202,6 @@ extern "C" void app_main() {
         /*
                 TEST
         */
-
-        delay_s(5000);
-        sensor.readTemperatureHumidity();
-        lcd.print(sensor.getTemperature());
 
     }
 

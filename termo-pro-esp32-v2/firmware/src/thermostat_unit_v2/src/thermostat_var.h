@@ -21,8 +21,8 @@ static constexpr uint32_t   LEDC_FREQ_HZ     = 5000;
 #define LEDC_RESOLUTION     LEDC_TIMER_8_BIT   // 0-255
 
 // -------------------- Retry & reboot counters --------------------
-extern int  counter;
-extern int  failed_receive;
+extern int  counter = 0;
+extern int  failed_receive = 0;
 extern bool last_command;
 
 // -------------------- ESP-NOW peer MAC (Starting Unit) --------------------
@@ -44,7 +44,8 @@ extern bool manual_control;
 // -------------------- Auto-mode timing flag --------------------
 // 0 = idle, 1 = heating started (record cool-down start), 2 = stopped
 extern int record_flag;
-
+//-------------------- EXT_TEMPERATURE --------------------
+extern float ext_temp;
 
 // ============================================================
 //  AUTO MODE
@@ -72,15 +73,15 @@ public:
     bool calc_co_2 = true;
 
     // day averager
-    int ntc_room_day     = 0;
+    long int ntc_room_day = 0;
     int delta_dynamic_day;
-    int co_1   = 0;
+    int co_1 = 0;
     int check_1 = 0;
 
     // night averager
     long int ntc_room_night = 0;
     int delta_dynamic_night;
-    int co_2   = 0;
+    int co_2 = 0;
     int check_2 = 0;
 
     const int FAST_COOL  = 120;   // minutes

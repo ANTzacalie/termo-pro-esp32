@@ -60,7 +60,6 @@ static void ledc_backlight_init() {
 
 }
 
-
 static void lcd_row_sel(int select) {
 
     lcd.setCursor(0 , select);
@@ -158,6 +157,7 @@ typedef enum : uint8_t
 {
 
     UNIT_CK            = 0,
+    MANUAL_OVERRIDE    = 1,
     // communication
     ERR_LEN_INVALID    = 10,
     ERR_DATA_INVALID   = 11,
@@ -174,8 +174,7 @@ typedef enum : uint8_t
 //
 //  Packet flow:
 //    TH  → SU : esp_data_send   { bool execute }
-//    SU  → TH : esp_data_state  { SETUP_UNIT_CK, UNIT_ERR  }
-//    SU  → TH : esp_data_sensor { SENSOR_CK, EXT_TEMP_VAL  }  [TODO]
+//    SU  → TH : esp_data_err&sensors { UNIT_ERR, SENSOR_CK, EXT_TEMP_VAL }
 // ============================================================
 
 class local {
@@ -199,13 +198,11 @@ public:
     // receive handler
     void onReceiveFinal(const uint8_t* data, int len) {
 
-        // Handle esp_data_state packet (SU boot / error report)
-        if (len == (int)sizeof(esp_data_state)) {
+        // Handle esp_data_state packet
+        if (len == (int)sizeof(esp_data_err_sensor)) {
 
-            esp_data_state pkt;
-            memcpy(&pkt, data, sizeof(pkt));
-
-            if (pkt.SETUP_UNIT_CK) {
+                esp_data_err_sensor pkt;
+                memcpy(&pkt, data, sizeof(pkt));
 
                 switch (pkt.UNIT_ERR) {
 
@@ -213,6 +210,10 @@ public:
                         lcd.clear();
                         lcd_row_sel(0);
                         lcd.print("SU CONNECTED");
+                        break;
+                    
+                    case MANUAL_OVERRIDE:
+                        // MAYBE SHOW ON SCREEN
                         break;
 
                     case ERR_WATCHDOG_RESET:
@@ -228,32 +229,51 @@ public:
                         break;
 
                     default:
-                        lcd.clear();
-                        lcd_row_sel(0);
-                        lcd.print("UNKNOWN ERROR SU");
                         break;
 
                 }
 
-            }
+                if(pkt.SENSOR_CK == 1) {
+
+                    if(isnan(pkt.EXT_TEMP_VAL)) {
+                        ext_temp = pkt.EXT_TEMP_VAL;
+                    }
+
+                } else if(pkt.SENSOR_CK == 0){ 
+                    // DO NOTHING
+                } else {
+
+                    lcd.clear();
+                    lcd_row_sel(0);
+                    lcd.print("EXT_TEMP_SENSOR");
+                    lcd_row_sel(1);
+                    lcd.print("REPLACE_SENSOR");
+
+                }
 
             failed_receive = 0;
             return;
 
-        }
-
-        // TODO: handle esp_data_sensor packet when SU external sensor is implemented
-        // if (len == (int)sizeof(esp_data_sensor)) { ... }
-
-        // Unknown / wrong-length packet
-        if (failed_receive < 10) {
-
-            failed_receive++;
-
         } else {
 
-            send(false);
-            esp_restart();
+            // Unknown / wrong-length packet / not responding correctly
+            if (failed_receive < 10) {
+
+                failed_receive++;
+
+            } else {
+
+                send(false);
+
+                lcd.clear();
+                lcd_row_sel(0);
+                lcd.print("FAILED_EST_SU");
+                lcd_row_sel(1);
+                lcd.print("REBOOT_SU/TH_M");
+
+                esp_restart();
+
+            }
 
         }
 
@@ -274,7 +294,12 @@ public:
         } else {
 
             ESP_LOGE(TAG_TH, "ESP-NOW send retry limit — restarting");
-            esp_restart();
+            counter = 0;
+            lcd.clear();
+            lcd_row_sel(0);
+            lcd.print("FAILED_RECH_SU");
+            lcd_row_sel(1);
+            lcd.print("Maybe SU_OFF_D?");
 
         }
 
@@ -296,14 +321,9 @@ private:
         bool execute;
     };
 
-    // Incoming: boot / error status from Starting Unit
-    struct [[gnu::packed]] esp_data_state {
-        bool    SETUP_UNIT_CK;
+    // Incoming: external temperature from Starting Unit /**(TODO — not implemented on SU yet)**/
+    struct [[gnu::packed]] esp_data_err_sensor {
         uint8_t UNIT_ERR;
-    };
-
-    // Incoming: external temperature from Starting Unit (TODO — not implemented on SU yet)
-    struct [[gnu::packed]] esp_data_sensor {
         uint8_t SENSOR_CK;
         float   EXT_TEMP_VAL;
     };
@@ -413,6 +433,41 @@ public:
         //   nvs_set_blob(nvs_handle, "p0_start", &program0.START_TEMP, sizeof(float));
         //   ...
         //   nvs_commit(nvs_handle);
+        /*
+
+bool last_command;
+uint8_t receiverMAC[6];
+int day_start;    
+int night_start;
+int hour;
+int minute;
+int day; 
+int  program_choice;
+long int ntc_room_day = 0;
+long int ntc_room_night = 0;
+
+// + program data for all
+
+*/
+        nvs_set_i8(nvs_handle,  "l_cmd", last_command ? 1 : 0);
+        nvs_set_blob(nvs_handle,"rec_mac", receiverMAC, sizeof(receiverMAC));
+        nvs_set_i32(nvs_handle, "day_s", day_start);
+        nvs_set_i32(nvs_handle, "night_s", night_start);
+        nvs_set_i32(nvs_handle, "hour", hour);
+        nvs_set_i32(nvs_handle, "minute", minute);
+        nvs_set_i32(nvs_handle, "day", day);
+        nvs_set_i32(nvs_handle, "prg_ch", program_choice);
+        nvs_set_i32(nvs_handle, "ntc_r_d", confort_mode.ntc_room_day);
+        nvs_set_i32(nvs_handle, "ntc_r_n", confort_mode.ntc_room_night);
+
+        for(int i = 0; i < 5; i++) {
+
+
+
+        }
+
+
+        nvs_commit(nvs_handle);
         nvs_close(nvs_handle);
 
     }
