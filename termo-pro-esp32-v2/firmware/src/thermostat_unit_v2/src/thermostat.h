@@ -168,7 +168,6 @@ typedef enum : uint8_t
 
 } UNIT_P_ERR;
 
-
 // ============================================================
 //  ESP-NOW COMMUNICATION  (Thermostat Unit side)
 //
