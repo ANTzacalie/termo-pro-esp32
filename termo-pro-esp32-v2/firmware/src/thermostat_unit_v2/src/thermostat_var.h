@@ -1,7 +1,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
-
+#include <string>
 // -------------------- Button GPIO pins --------------------
 static constexpr gpio_num_t BUTTON_UP_PIN   = GPIO_NUM_26;
 static constexpr gpio_num_t BUTTON_DOWN_PIN = GPIO_NUM_27;
@@ -21,8 +21,8 @@ static constexpr uint32_t   LEDC_FREQ_HZ     = 5000;
 #define LEDC_RESOLUTION     LEDC_TIMER_8_BIT   // 0-255
 
 // -------------------- Retry & reboot counters --------------------
-extern int  counter = 0;
-extern int  failed_receive = 0;
+int  counter = 0;
+int  failed_receive = 0;
 extern bool last_command;
 
 // -------------------- ESP-NOW peer MAC (Starting Unit) --------------------
@@ -54,43 +54,22 @@ class auto_mode {
 
 public:
 
-    float START_TEMP = 0;
-    float STOP_TEMP  = 0;
+    float get_stemp() {
+        return s_temp;
+    }
 
-    const int reset_adjustment = 7;
-    int       day_increment    = 0;
+    float get_ptemp() {
+        return p_temp;
+    }
 
-    // adjusted preheat start temperatures
-    float adjust_start_temp_day   = 0;
-    float adjust_start_temp_night = 0;
+    void set_stemp(float temp) {
+        s_temp = temp;
+    }
 
-    // measured room cool-down times (minutes)
-    int time_night = 0;
-    int time_day   = 0;
+    void set_ptemp(float temp) {
+        p_temp = temp;
+    }
 
-    // calculation flags
-    bool calc_co_1 = true;
-    bool calc_co_2 = true;
-
-    // day averager
-    long int ntc_room_day = 0;
-    int delta_dynamic_day;
-    int co_1 = 0;
-    int check_1 = 0;
-
-    // night averager
-    long int ntc_room_night = 0;
-    int delta_dynamic_night;
-    int co_2 = 0;
-    int check_2 = 0;
-
-    const int FAST_COOL  = 120;   // minutes
-    const int SLOW_COOL  = 480;   // minutes
-    const int MAX_PREHEAT = 60;   // max early-start minutes
-
-    float comfort_factor = 1.0f;
-
-    // ----------------------------------------------------------
     void adjust_ntc_day() {
 
         if (!calc_co_1) return;
@@ -137,8 +116,46 @@ public:
 
     }
 
+    long int ntc_room_day = 0;
+    long int ntc_room_night = 0;
+
 private:
 
+    float s_temp = 0;
+    float p_temp  = 0;
+
+    const int reset_adjustment = 7;
+    int       day_increment    = 0;
+
+    // adjusted preheat start temperatures
+    float adjust_start_temp_day   = 0;
+    float adjust_start_temp_night = 0;
+
+    // measured room cool-down times (minutes)
+    int time_night = 0;
+    int time_day   = 0;
+
+    // calculation flags
+    bool calc_co_1 = true;
+    bool calc_co_2 = true;
+
+    // day averager
+    int delta_dynamic_day;
+    int co_1 = 0;
+    int check_1 = 0;
+
+    // night averager
+    int delta_dynamic_night;
+    int co_2 = 0;
+    int check_2 = 0;
+
+    const int FAST_COOL  = 120;   // minutes
+    const int SLOW_COOL  = 480;   // minutes
+    const int MAX_PREHEAT = 60;   // max early-start minutes
+
+    float comfort_factor = 1.0f;
+
+    // ----------------------------------------------------------
     void compute_day_adjust() {
 
         int t = ntc_room_day;
@@ -147,7 +164,7 @@ private:
 
         float factor       = float(SLOW_COOL - t) / float(SLOW_COOL - FAST_COOL);
         delta_dynamic_day  = int(factor * MAX_PREHEAT * comfort_factor);
-        adjust_start_temp_day = START_TEMP + temp_offset(delta_dynamic_day);
+        adjust_start_temp_day = s_temp + temp_offset(delta_dynamic_day);
 
     }
 
@@ -159,7 +176,7 @@ private:
 
         float factor         = float(SLOW_COOL - t) / float(SLOW_COOL - FAST_COOL);
         delta_dynamic_night  = int(factor * MAX_PREHEAT * comfort_factor);
-        adjust_start_temp_night = START_TEMP + temp_offset(delta_dynamic_night);
+        adjust_start_temp_night = s_temp + temp_offset(delta_dynamic_night);
 
     }
 
@@ -182,31 +199,111 @@ extern auto_mode confort_mode;
 */
 class prog_1 {
 public:
-    float START_TEMP = 0;
-    float STOP_TEMP  = 0;
+    
+
+     float get_stemp() {
+        return s_temp;
+    }
+
+    float get_ptemp() {
+        return p_temp;
+    }
+
+    void set_stemp(float temp) {
+        s_temp = temp;
+    }
+
+    void set_ptemp(float temp) {
+        p_temp = temp;
+    }
+
+    private:
+        float s_temp = 0;
+        float p_temp = 0;
+
 };
 
 class prog_2 {
 public:
-    float START_TEMP = 0;
-    float STOP_TEMP  = 0;
+    
+
+     float get_stemp() {
+        return s_temp;
+    }
+
+    float get_ptemp() {
+        return p_temp;
+    }
+
+    void set_stemp(float temp) {
+        s_temp = temp;
+    }
+
+    void set_ptemp(float temp) {
+        p_temp = temp;
+    }
+
+    private:
+        float s_temp = 0;
+        float p_temp = 0;
+
 };
 
 class prog_3 {
 public:
-    float START_TEMP = 0;
-    float STOP_TEMP  = 0;
+    
+
+     float get_stemp() {
+        return s_temp;
+    }
+
+    float get_ptemp() {
+        return p_temp;
+    }
+
+    void set_stemp(float temp) {
+        s_temp = temp;
+    }
+
+    void set_ptemp(float temp) {
+        p_temp = temp;
+    }
+
+    private:
+        float s_temp = 0;
+        float p_temp = 0;
+
 };
 
 class prog_4 {
 public:
-    float START_TEMP = 0;
-    float STOP_TEMP  = 0;
+    
+
+     float get_stemp() {
+        return s_temp;
+    }
+
+    float get_ptemp() {
+        return p_temp;
+    }
+
+    void set_stemp(float temp) {
+        s_temp = temp;
+    }
+
+    void set_ptemp(float temp) {
+        p_temp = temp;
+    }
+
+    private:
+        float s_temp = 0;
+        float p_temp = 0;
+
 };
 
 // -------------------- Basic / default program --------------------
 class basic {
 public:
-    float START_TEMP = 20;
-    float STOP_TEMP  = 23;
+    float s_temp = 20;
+    float p_temp = 23;
 };

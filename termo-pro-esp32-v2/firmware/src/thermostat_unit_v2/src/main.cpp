@@ -19,13 +19,13 @@ int day         = 0;    // weekday 1-7 (Mon=1, Sun=7)
 int  program_choice  = 0;
 bool manual_control  = false;
 int  record_flag     = 0;
+float ext_temp;
 
 // auto mode instance  (extern in thermostat_var.h)
 auto_mode confort_mode;
 
 // ESP-NOW class static instance pointer (defined in thermostat.h)
 local* local::instance = nullptr;
-
 
 //  PROGRAM INSTANCES
 auto_mode program_auto;
@@ -47,7 +47,6 @@ enum brightness_control : uint16_t {
     ULTRA_H_BC = 4000
 
 };
-
 
 // Set the internal RTC from explicit hour/minute/weekday values.
 // Uses a fixed dummy date (Mon 1 Jan 2024) shifted by weekday offset.
@@ -108,6 +107,112 @@ int check_for_stop(float current_temp, float stop_temp) {
 
 }
 
+
+//  NVS STORAGE  (Preferences wrapper — bodies stubbed, fill later)
+class data {
+
+private:
+    nvs_handle_t nvs_handle = 0;
+
+public:
+
+    // Call once at boot — opens NVS namespace and loads saved values.
+    void begin() {
+
+        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
+        if (err != ESP_OK) {
+            ESP_LOGE(TAG_TH, "NVS open failed: %s", esp_err_to_name(err));
+            return;
+        }
+
+        load();
+        nvs_close(nvs_handle);
+
+    }
+
+    // Call whenever the user changes a program value.
+    void save() {
+
+        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
+        if (err != ESP_OK) {
+            ESP_LOGE(TAG_TH, "NVS open (save) failed: %s", esp_err_to_name(err));
+            return;
+        }
+
+        nvs_set_i8(nvs_handle,  "l_cmd", last_command ? 1 : 0);
+        nvs_set_blob(nvs_handle,"rec_mac", receiverMAC, sizeof(receiverMAC));
+        nvs_set_i32(nvs_handle, "day_s", day_start);
+        nvs_set_i32(nvs_handle, "night_s", night_start);
+        nvs_set_i32(nvs_handle, "hour", hour);
+        nvs_set_i32(nvs_handle, "minute", minute);
+        nvs_set_i32(nvs_handle, "day", day);
+        nvs_set_i32(nvs_handle, "prg_ch", program_choice);
+        nvs_set_i32(nvs_handle, "ntc_r_d", confort_mode.ntc_room_day);
+        nvs_set_i32(nvs_handle, "ntc_r_n", confort_mode.ntc_room_night);
+
+        save_programs();
+        nvs_commit(nvs_handle);
+        nvs_close(nvs_handle);
+
+    }
+
+    void save_programs() {
+
+        float s_temp;
+        float p_temp;
+
+        for(int i = 1; i < 5; i++) {
+            
+            switch (i)
+            {
+                case 1:
+                    s_temp = program1.get_stemp();
+                    p_temp = program1.get_ptemp();
+                    break;
+                case 2:
+                    s_temp = program2.get_stemp();
+                    p_temp = program2.get_ptemp();
+                    break;
+                case 3:
+                    s_temp = program3.get_stemp();
+                    p_temp = program3.get_ptemp();
+                    break;
+                case 4:
+                    s_temp = program4.get_stemp();
+                    p_temp = program4.get_ptemp();
+                    break;
+                case 5:
+                    s_temp = program_auto.get_stemp();
+                    p_temp = program_auto.get_ptemp();
+                    break;
+            
+                default:
+                    break;
+            }
+            
+            char key[] = "st_temp_p0";
+            key[9] = '0' + i;  // i.....5
+            nvs_set_blob(nvs_handle, key, &s_temp, sizeof(s_temp));
+            nvs_set_blob(nvs_handle, key, &p_temp, sizeof(p_temp));
+
+        }
+        
+    }
+
+private:
+
+    void load() {
+
+        //   TODO: restore saved values from NVS
+        //   example:
+        //   int32_t v = 5;
+        //   nvs_get_i32(nvs_handle, "day_start", &v);
+        //   day_start = v;
+        //   ...
+
+    }
+
+} storage;
 
 //  CUSTOM LCD CHARACTERS(ARROW UP)
 static uint8_t arrowUp[8] = {

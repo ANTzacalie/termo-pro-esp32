@@ -12,7 +12,6 @@
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "nvs.h"
-
 // time
 #include <time.h>
 #include <sys/time.h>
@@ -392,82 +391,3 @@ static void gpio_buttons_init() {
     gpio_set_pull_mode(BUTTON_SAVE_PIN, GPIO_PULLUP_ONLY);
 
 }
-
-
-//  NVS STORAGE  (Preferences wrapper — bodies stubbed, fill later)
-class data {
-
-private:
-    nvs_handle_t nvs_handle = 0;
-
-public:
-
-    // Call once at boot — opens NVS namespace and loads saved values.
-    void begin() {
-
-        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
-        if (err != ESP_OK) {
-            ESP_LOGE(TAG_TH, "NVS open failed: %s", esp_err_to_name(err));
-            return;
-        }
-
-        load();
-        nvs_close(nvs_handle);
-
-    }
-
-    // Call whenever the user changes a program value.
-    void save() {
-
-        esp_err_t err = nvs_open("programs", NVS_READWRITE, &nvs_handle);
-        if (err != ESP_OK) {
-            ESP_LOGE(TAG_TH, "NVS open (save) failed: %s", esp_err_to_name(err));
-            return;
-        }
-
-        nvs_set_i8(nvs_handle,  "l_cmd", last_command ? 1 : 0);
-        nvs_set_blob(nvs_handle,"rec_mac", receiverMAC, sizeof(receiverMAC));
-        nvs_set_i32(nvs_handle, "day_s", day_start);
-        nvs_set_i32(nvs_handle, "night_s", night_start);
-        nvs_set_i32(nvs_handle, "hour", hour);
-        nvs_set_i32(nvs_handle, "minute", minute);
-        nvs_set_i32(nvs_handle, "day", day);
-        nvs_set_i32(nvs_handle, "prg_ch", program_choice);
-        nvs_set_i32(nvs_handle, "ntc_r_d", confort_mode.ntc_room_day);
-        nvs_set_i32(nvs_handle, "ntc_r_n", confort_mode.ntc_room_night);
-
-        save_programs();
-        nvs_commit(nvs_handle);
-        nvs_close(nvs_handle);
-
-    }
-
-    void save_programs() {
-
-        nvs_set_blob(nvs_handle, "st_temp_p1", &program1.START_TEMP, sizeof(program1.START_TEMP));
-        nvs_set_blob(nvs_handle, "sp_temo_p1", &program1.STOP_TEMP,  sizeof(program1.STOP_TEMP));
-        nvs_set_blob(nvs_handle, "st_temp_p2", &program2.START_TEMP, sizeof(program2.START_TEMP));
-        nvs_set_blob(nvs_handle, "sp_temo_p2", &program2.STOP_TEMP,  sizeof(program2.STOP_TEMP));
-        nvs_set_blob(nvs_handle, "st_temp_p3", &program3.START_TEMP, sizeof(program3.START_TEMP));
-        nvs_set_blob(nvs_handle, "sp_temo_p4", &program3.STOP_TEMP,  sizeof(program3.STOP_TEMP));
-        nvs_set_blob(nvs_handle, "st_temp_p4", &program4.START_TEMP, sizeof(program4.START_TEMP));
-        nvs_set_blob(nvs_handle, "sp_temo_p4", &program4.STOP_TEMP,  sizeof(program4.STOP_TEMP));
-        nvs_set_blob(nvs_handle, "st_temp_p_auto", &program_auto.START_TEMP, sizeof(program_auto.START_TEMP));
-        nvs_set_blob(nvs_handle, "sp_temo_p_auto", &program_auto.STOP_TEMP,  sizeof(program_auto.STOP_TEMP));
-    }
-
-private:
-
-    void load() {
-
-        //   TODO: restore saved values from NVS
-        //   example:
-        //   int32_t v = 5;
-        //   nvs_get_i32(nvs_handle, "day_start", &v);
-        //   day_start = v;
-        //   ...
-
-    }
-
-} storage;
-
