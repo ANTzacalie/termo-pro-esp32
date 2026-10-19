@@ -101,7 +101,7 @@ class sensors {
 
 public:
 
-    // Set LCD backlight brightness (0-255)
+    // Set LCD backlight brightness (0-255), 8bit res;
     void setBrightness(uint32_t value) {
 
         ledc_set_duty(LEDC_SPEED_DISPLAY, LEDC_CH_DISPLAY, value);
@@ -207,23 +207,23 @@ public:
                     case UNIT_CK:
                         lcd.clear();
                         lcd_row_sel(0);
-                        lcd.print("SU CONNECTED");
+                        lcd.print("SU_CONNECTED");
                         break;
                     
                     case MANUAL_OVERRIDE:
-                        // MAYBE SHOW ON SCREEN
+                        // MAYBE SHOW ON SCREEN 
                         break;
 
                     case ERR_WATCHDOG_RESET:
                         lcd.clear();
                         lcd_row_sel(0);
-                        lcd.print("RESTART SU NOW!");
+                        lcd.print("RESTART_SU!");
                         break;
 
                     case ERR_BROWNOUT:
                         lcd.clear();
                         lcd_row_sel(0);
-                        lcd.print("DROP.VOLT ERR SU");
+                        lcd.print("DROP.VOLT_SU");
                         break;
 
                     default:
@@ -235,17 +235,19 @@ public:
 
                     if(isnan(pkt.EXT_TEMP_VAL)) {
                         ext_temp = pkt.EXT_TEMP_VAL;
+                    } else {
+                        // Error in reading ext_sensor value, retry!
                     }
 
                 } else if(pkt.SENSOR_CK == 0){ 
-                    // DO NOTHING
+                    // DO NOTHING, Means the SU module dose not have an external sensor connected at boot;
                 } else {
 
                     lcd.clear();
                     lcd_row_sel(0);
                     lcd.print("EXT_TEMP_SENSOR");
                     lcd_row_sel(1);
-                    lcd.print("REPLACE_SENSOR");
+                    lcd.print("REPLACE_T_SENSOR");
 
                 }
 
@@ -295,7 +297,7 @@ public:
             counter = 0;
             lcd.clear();
             lcd_row_sel(0);
-            lcd.print("FAILED_RECH_SU");
+            lcd.print("FAILED_TO_SU");
             lcd_row_sel(1);
             lcd.print("Maybe SU_OFF_D?");
 
