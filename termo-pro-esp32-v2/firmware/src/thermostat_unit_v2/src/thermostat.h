@@ -118,7 +118,7 @@ public:
 
             lcd_row_sel(0);
             lcd.print("TEMP_READ_ERR");
-            ESP_LOGE(TAG_TH, "DHT11 read failed");
+            ESP_LOGE(TAG_TH, "DHT11 read failed!");
             return;
 
         }
