@@ -241,7 +241,7 @@ public:
 
                 } else if(pkt.SENSOR_CK == 0){ 
                     // DO NOTHING, Means the SU module dose not have an external sensor connected at boot;
-                } else {
+                } else if(pkt.SENSOR_CK == 9) {
 
                     lcd.clear();
                     lcd_row_sel(0);

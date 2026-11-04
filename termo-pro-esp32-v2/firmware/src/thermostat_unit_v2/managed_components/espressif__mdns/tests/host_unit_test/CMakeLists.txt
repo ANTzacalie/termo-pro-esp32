@@ -12,7 +12,7 @@ project(mdns_host_unit_test C)
 
 # Set ENABLE_UNIT_TESTS with a default of OFF
 if(NOT DEFINED UNIT_TESTS)
-    set(UNIT_TESTS "OFF" CACHE STRING "Unit tests: OFF, test_receiver, test_sender")
+    set(UNIT_TESTS "OFF" CACHE STRING "Unit tests: OFF, test_receiver, test_sender, test_cache, test_browse")
 else()
     set(ENABLE_UNIT_TESTS 1)
     message(STATUS "Unit testing enabled with UNIT_TESTS=${UNIT_TESTS}")
@@ -63,6 +63,7 @@ set(SOURCES
     ${MDNS_DIR}/mdns_send.c
     ${MDNS_DIR}/mdns_pcb.c
     ${MDNS_DIR}/mdns_netif.c
+    ${MDNS_DIR}/mdns_cache.c
 )
 
 if(ENABLE_UNIT_TESTS)

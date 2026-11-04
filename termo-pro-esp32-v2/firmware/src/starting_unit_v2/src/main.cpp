@@ -347,13 +347,17 @@ void manual_start(void *p) {
     LOGIC FOR EXTERNAL TEMPERATURE SENSOR TO BE IMPLEMENTED!
     - Pin init&atten&cali;
     - Read&Interpret value of the thermistor B3950 10k;
-    - Send the temperature value to Thermostat Unit;
+    - Send the temperature value to Thermostat Unit at an 1 min interval
     - Thats al;
-
-    void external_sensor(void *p) 
-    {}
-
 */
+void external_sensor(void *p) 
+{
+    
+    while (true) {
+        
+    }
+
+}
 
 // ### APP MAIN ################################################################
 extern "C" void app_main()
@@ -379,8 +383,8 @@ extern "C" void app_main()
     }
 
     delay(1000);
-    xTaskCreatePinnedToCore(manual_start, "M_PIN_BTN",   4096, NULL, 15, NULL, 0); // importance 15;
-    //     xTaskCreatePinnedToCore(external_sensor, "EXT_SENSOR",   8192, NULL, 10, NULL, 1); // importance 10;
+    xTaskCreatePinnedToCore(manual_start, "M_PIN_BTN", 8192, NULL, 15, NULL, 0); // importance 15;
+    xTaskCreatePinnedToCore(external_sensor, "EXT_SENSOR",   4096, NULL, 10, NULL, 0); // importance 10;
 
 
 }
