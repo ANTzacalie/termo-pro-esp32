@@ -26,6 +26,10 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "driver/gpio.h"
+#include <math.h>
+#include "esp_adc/adc_oneshot.h"
+#include "esp_adc/adc_cali.h"
+#include "esp_adc/adc_cali_scheme.h"
 
 // ### TAG ####################################################################
 static const char* TAG = "LOG[SU]";
@@ -47,6 +51,7 @@ static uint8_t receiver_mac[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 typedef enum : uint8_t {
 
     UNIT_CK            = 0,
+    
     // communication
     ERR_LEN_INVALID    = 10,
     ERR_DATA_INVALID   = 11,
@@ -342,21 +347,126 @@ void manual_start(void *p) {
     
 }
 
-/*
-
-    LOGIC FOR EXTERNAL TEMPERATURE SENSOR TO BE IMPLEMENTED!
-    - Pin init&atten&cali;
-    - Read&Interpret value of the thermistor B3950 10k;
-    - Send the temperature value to Thermostat Unit at an 1 min interval
-    - Thats al;
-*/
-void external_sensor(void *p) 
+// Applies the termistor ecuations and calibration;
+/* T_EQ: T_C = 1 / (1/298,15 + 1/3950*ln(Rntc/10000)) - 273,15 */
+void external_sensor(void *p)
 {
-    
-    while (true) {
-        
-    }
+    (void)p;
 
+    constexpr float VCC_MV = 3300.0f; // 3.3V voltage supply to the termistor
+    constexpr float R_FIXED = 10000.0f; // R2 from the divider
+    constexpr float R_NTC_25 = 10000.0f; // 10k NTC
+    constexpr float BETA = 3950.0f; // from the termistor caract.
+    constexpr float T25_K = 298.15f; // 25 celsius in kelvin
+
+    constexpr int SAMPLES = 32; // 32 samples
+    constexpr adc_atten_t ATTEN = ADC_ATTEN_DB_11;
+    const TickType_t period = pdMS_TO_TICKS(60000);
+
+    // ADC CALBRATION //
+    adc_unit_t unit;
+    adc_channel_t channel;
+    adc_oneshot_unit_handle_t adc = nullptr;
+    adc_cali_handle_t calibration = nullptr;
+
+    ESP_ERROR_CHECK(adc_oneshot_io_to_channel(
+        static_cast<int>(PIN_TEMP_SENSE), &unit, &channel
+    ));
+
+    adc_oneshot_unit_init_cfg_t adc_cfg = {};
+    adc_cfg.unit_id = unit;
+
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&adc_cfg, &adc));
+
+    adc_oneshot_chan_cfg_t channel_cfg = {};
+    channel_cfg.atten = ATTEN;
+    channel_cfg.bitwidth = ADC_BITWIDTH_12;
+
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(
+        adc, channel, &channel_cfg
+    ));
+
+    adc_cali_curve_fitting_config_t calibration_cfg = {};
+    calibration_cfg.unit_id = unit;
+    calibration_cfg.atten = ATTEN;
+    calibration_cfg.bitwidth = ADC_BITWIDTH_12;
+
+    ESP_ERROR_CHECK(adc_cali_create_scheme_curve_fitting(
+        &calibration_cfg, &calibration
+    ));
+
+    // ADC CALBRATION //
+
+    TickType_t last_wake = xTaskGetTickCount();
+    while (true) {
+        float sum_mv = 0.0f;
+        bool read_ok = true;
+        bool saturated = false;
+
+        sensor_temp = NAN;
+
+        for (int i = 0; i < SAMPLES; ++i) { // dose the 32 samples
+            int raw = 0;
+            int mv = 0;
+
+            if (adc_oneshot_read(adc, channel, &raw) != ESP_OK) {
+                read_ok = false;
+                break;
+            }
+
+            if (raw >= 4090) {
+                saturated = true;
+                break;
+            }
+
+            if (adc_cali_raw_to_voltage(calibration, raw, &mv) != ESP_OK) {
+                read_ok = false;
+                break;
+            }
+
+            sum_mv += static_cast<float>(mv);
+            vTaskDelay(1);
+        }
+
+        uint8_t sensor_ck = 1;
+
+        if (!read_ok) {
+            // Sensor configured, failed reading: sends NAN to termostat
+            ESP_LOGW("EXT_SENSOR", "ADC read failed");
+
+        } else if (saturated) {
+            sensor_ck = 9;
+            ESP_LOGW("EXT_SENSOR", "ADC saturated");
+
+        } else {
+
+            const float voltage_mv = sum_mv / SAMPLES;
+            if (voltage_mv < 100.0f || voltage_mv > 2450.0f) {
+
+                sensor_ck = 9;
+                ESP_LOGW("EXT_SENSOR", "Voltage outside range: %.0f mV",voltage_mv);
+                
+            } else {
+                const float resistance = R_FIXED * (VCC_MV / voltage_mv - 1.0f);
+
+                const float inverse_kelvin = 1.0f / T25_K + logf(resistance / R_NTC_25) / BETA;
+
+                if (isfinite(inverse_kelvin) && inverse_kelvin > 0.0f) {
+                    sensor_temp = 1.0f / inverse_kelvin - 273.15f;
+                }
+
+                if (!isfinite(sensor_temp)) {
+                    sensor_temp = NAN;
+                    sensor_ck = 9;
+                } else {
+                    ESP_LOGI("EXT_SENSOR", "%.2f C", sensor_temp);
+                }
+            }
+        }
+
+        send(0, sensor_ck, sensor_temp);
+        vTaskDelayUntil(&last_wake, period);
+    }
 }
 
 // ### APP MAIN ################################################################
