@@ -159,6 +159,7 @@ static void send(uint8_t error, uint8_t sensor_ck, float ext_temp)
 static void handle_error(uint8_t error)
 {
 
+    /*
     last_error = error;
 
     if (retry_counter < 10) {
@@ -166,12 +167,8 @@ static void handle_error(uint8_t error)
         retry_counter++;
         send(error, 0, 0);
 
-    } else {
-
-        ESP_LOGE(TAG, "Retry limit hit - restarting");
-        esp_restart();
-
-    }
+    } else { retry_counter = 10; }
+    */
 
 }
 
@@ -483,6 +480,7 @@ extern "C" void app_main()
     wifi_espnow_init();
 
     uint8_t boot_err = report_boot_status();
+    
     if (boot_err != 1) {
 
         ESP_LOGW(TAG, "Abnormal boot: error 0x%02X", boot_err);
@@ -494,6 +492,7 @@ extern "C" void app_main()
         send(UNIT_CK, 0, 0);
         
     }
+    
 
     delay(1000);
     xTaskCreatePinnedToCore(manual_start, "M_PIN_BTN", 8192, NULL, 15, NULL, 0); // importance 15;
