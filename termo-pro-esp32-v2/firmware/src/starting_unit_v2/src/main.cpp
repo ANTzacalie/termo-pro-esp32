@@ -360,7 +360,7 @@ void external_sensor(void *p)
     constexpr float T25_K = 298.15f; // 25 celsius in kelvin
 
     constexpr int SAMPLES = 32; // 32 samples
-    constexpr adc_atten_t ATTEN = ADC_ATTEN_DB_11;
+    constexpr adc_atten_t ATTEN = ADC_ATTEN_DB_12;
     const TickType_t period = pdMS_TO_TICKS(60000);
 
     // ADC CALBRATION //
