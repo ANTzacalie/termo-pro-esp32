@@ -11,7 +11,7 @@
  * GPIO3  → resistor → 12 mm LED-button (+)  [auxiliary, output only here]
  * GPIO5  → resistor → green LED
  * GPIO6  → resistor → red   LED
- * GPIO7  → resistor → PN2222A base  (motor/load switch)
+ * GPIO7  → resistor → PN2222A base  (relay switch)
  * 3.3 V  → NTC sensor VCC
  * 5 V    → board VIN
  */
@@ -44,7 +44,7 @@ static constexpr gpio_num_t PIN_TRANSISTOR = GPIO_NUM_7;   // PN2222A base -> RE
 int sensor_ck = 0;
 float sensor_temp = 0.0f;
 
-// ### ESP-NOW PEER  (replace with real MAC before flashing!) ##################
+/* ***- ESP-NOW PEER  (replace with real MAC before flashing!) -** */
 static uint8_t receiver_mac[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 // ### ERROR CODES ############################################################
@@ -297,7 +297,7 @@ static void wifi_espnow_init()
     // ESP-NOW
     if (esp_now_init() != ESP_OK) {
 
-        ESP_LOGE(TAG, "UNIT_START failed — restarting");
+        ESP_LOGE(TAG, "ESP_NOW_WIFI failed — restarting");
         esp_restart();
 
     }
