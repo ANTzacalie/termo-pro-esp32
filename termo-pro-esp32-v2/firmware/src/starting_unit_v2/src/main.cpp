@@ -231,7 +231,7 @@ static uint8_t report_boot_status()
             return ERR_WATCHDOG_RESET;
 
         case ESP_RST_POWERON:
-            return UNIT_CK;
+            return ESP_RST_POWERON;
 
         default:                
             return ERR_REBOOTED;
@@ -483,7 +483,7 @@ extern "C" void app_main()
     wifi_espnow_init();
 
     uint8_t boot_err = report_boot_status();
-    if (boot_err != UNIT_CK) {
+    if (boot_err != 1) {
 
         ESP_LOGW(TAG, "Abnormal boot: error 0x%02X", boot_err);
         handle_error(boot_err);
