@@ -164,7 +164,7 @@ static void handle_error(uint8_t error)
     if (retry_counter < 10) {
 
         retry_counter++;
-        espnow_send(error);
+        send(error, 0, 0);
 
     } else {
 
@@ -491,7 +491,7 @@ extern "C" void app_main()
     } else {
 
         // send clean-boot ok to controller-esp
-        espnow_send(UNIT_CK);
+        send(UNIT_CK, 0, 0);
         
     }
 

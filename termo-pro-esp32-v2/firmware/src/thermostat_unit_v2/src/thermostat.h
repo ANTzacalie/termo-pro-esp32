@@ -240,14 +240,14 @@ public:
                     }
 
                 } else if(pkt.SENSOR_CK == 0){ 
-                    // DO NOTHING, Means the SU module dose not have an external sensor connected at boot;
+                    // DO NOTHING, Means the SU module dose not have an external sensor connected at boot or not intersted in reporting;
                 } else if(pkt.SENSOR_CK == 9) {
 
                     lcd.clear();
                     lcd_row_sel(0);
                     lcd.print("EXT_TEMP_SENSOR");
                     lcd_row_sel(1);
-                    lcd.print("REPLACE_T_SENSOR");
+                    lcd.print("REP/W_T_SENSOR");
 
                 }
 
