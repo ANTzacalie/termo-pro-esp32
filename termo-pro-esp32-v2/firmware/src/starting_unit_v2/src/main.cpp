@@ -325,6 +325,8 @@ void manual_start(void *p) {
 
                 if(!is_on.load())
                     set_load(true, 1);
+                
+                delay(2000);
 
             } else {
                 
@@ -334,6 +336,7 @@ void manual_start(void *p) {
                 if(!is_on.load())
                     set_load(false, 1);
 
+                delay(2000);
             }
 
         }
