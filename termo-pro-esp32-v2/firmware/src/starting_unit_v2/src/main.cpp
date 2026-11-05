@@ -470,7 +470,6 @@ void external_sensor(void *p)
 }
 
 /* DE ADAUGAT IN TERMOSTAT */
-// schimba isnan(...) în isfinite(...).
 // de rezolvat cu eroarea
 
 // ### APP MAIN ################################################################

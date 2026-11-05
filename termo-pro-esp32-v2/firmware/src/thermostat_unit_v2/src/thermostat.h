@@ -233,7 +233,7 @@ public:
 
                 if(pkt.SENSOR_CK == 1) {
 
-                    if(isnan(pkt.EXT_TEMP_VAL)) {
+                    if(isfinite(pkt.EXT_TEMP_VAL)) {
                         ext_temp = pkt.EXT_TEMP_VAL;
                     } else {
                         // Error in reading ext_sensor value, retry!
