@@ -224,17 +224,17 @@ static uint8_t report_boot_status()
     switch (esp_reset_reason()) 
     {
         case ESP_RST_BROWNOUT:
-            return ERR_BROWNOUT;
+            return 30;
 
         case ESP_RST_WDT:
         case ESP_RST_TASK_WDT:
-            return ERR_WATCHDOG_RESET;
+            return 32;
 
         case ESP_RST_POWERON:
-            return ESP_RST_POWERON;
+            return 1;
 
         default:                
-            return ERR_REBOOTED;
+            return 31;
     }
 }
 
