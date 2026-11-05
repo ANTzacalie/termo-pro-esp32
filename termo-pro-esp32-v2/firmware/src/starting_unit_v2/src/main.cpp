@@ -470,9 +470,6 @@ void external_sensor(void *p)
     }
 }
 
-/* DE ADAUGAT IN TERMOSTAT */
-// de rezolvat cu eroarea
-
 // ### APP MAIN ################################################################
 extern "C" void app_main()
 {
@@ -497,7 +494,6 @@ extern "C" void app_main()
         
     }
     
-
     delay(1000);
     xTaskCreatePinnedToCore(manual_start, "M_PIN_BTN", 8192, NULL, 15, NULL, 0); // importance 15;
     xTaskCreatePinnedToCore(external_sensor, "EXT_SENSOR",   4096, NULL, 10, NULL, 0); // importance 10;
