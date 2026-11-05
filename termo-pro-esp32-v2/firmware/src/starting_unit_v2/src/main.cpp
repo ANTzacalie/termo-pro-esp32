@@ -159,16 +159,17 @@ static void send(uint8_t error, uint8_t sensor_ck, float ext_temp)
 static void handle_error(uint8_t error)
 {
 
-    /*
+
     last_error = error;
 
-    if (retry_counter < 10) {
+    if (retry_counter < 5) {
 
         retry_counter++;
+        vTaskDelay(pdMS_TO_TICKS(400));
         send(error, 0, 0);
 
-    } else { retry_counter = 10; }
-    */
+    } else { retry_counter = 0; }
+
 
 }
 
@@ -500,6 +501,5 @@ extern "C" void app_main()
     delay(1000);
     xTaskCreatePinnedToCore(manual_start, "M_PIN_BTN", 8192, NULL, 15, NULL, 0); // importance 15;
     xTaskCreatePinnedToCore(external_sensor, "EXT_SENSOR",   4096, NULL, 10, NULL, 0); // importance 10;
-
 
 }
