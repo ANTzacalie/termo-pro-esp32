@@ -1,7 +1,7 @@
 
 /*
  * starting-module-c3.cpp
- * ESP32-C3-SuperMini  —  ESP-IDF >= 5.x
+ * ESP32-C3-SuperMini  —  ESP-IDF >= 5.x and curve calibration
  *
  * GPIO MAP
  * --------
