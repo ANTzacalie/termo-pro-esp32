@@ -77,7 +77,7 @@ struct [[gnu::packed]] esp_data_sensor {
 static std::atomic<bool> is_on      = false;
 static int           retry_counter  = 0;
 static uint8_t       last_error     = UNIT_CK;
-static esp_data_state data_sent      = {};
+static esp_data_sensor data_sent    = {};
 
 
 // DELAY
@@ -459,7 +459,7 @@ void external_sensor(void *p)
                     sensor_temp = NAN;
                     sensor_ck = 9;
                 } else {
-                    ESP_LOGI("EXT_SENSOR", "%.2f C", sensor_temp);
+                    ESP_LOGI("EXT_SENSOR: ", "%.2f C", sensor_temp);
                 }
             }
         }
