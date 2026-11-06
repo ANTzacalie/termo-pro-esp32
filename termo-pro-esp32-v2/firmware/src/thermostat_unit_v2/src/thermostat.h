@@ -239,7 +239,7 @@ public:
                         // Error in reading ext_sensor value, retry!
                     }
 
-                } else if(pkt.SENSOR_CK == 0){ 
+                } else if(pkt.SENSOR_CK == 0) { 
                     // DO NOTHING, Means the SU module dose not have an external sensor connected at boot or not intersted in reporting;
                 } else if(pkt.SENSOR_CK == 9) {
 
