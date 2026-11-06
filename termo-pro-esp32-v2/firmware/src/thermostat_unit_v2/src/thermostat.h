@@ -3,6 +3,12 @@
 // IDF core
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
+#include "esp_timer.h"
+#include "esp_idf_version.h"
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
 #include "esp_adc/adc_oneshot.h"
 #include "driver/gpio.h"
 #include "driver/ledc.h"
@@ -23,6 +29,9 @@
 #include "thermostat_var.h"
 
 static const char* TAG_TH = "LOG[TH]";
+
+// 16-byte ESP-NOW Local Master Key. MUST be identical on both boards.
+static const uint8_t ESP_NOW_LMK[16] = { 0xDE, 0x24, 0x64, 0x98, 0x81, 0x22, 0x9E, 0xC9, 0xC9, 0xAD, 0x66, 0x90, 0x04, 0x64, 0xE0, 0x48 };
 
 // ============================================================
 //  DHT11
@@ -109,22 +118,23 @@ public:
 
     }
 
-    void readTemperatureHumidity() {
+    bool readTemperatureHumidity() {
 
         float h = dht.readHumidity();
         float t = dht.readTemperature();
 
         if (isnan(h) || isnan(t)) {
 
-            lcd_row_sel(0);
-            lcd.print("TEMP_READ_ERR");
-            ESP_LOGE(TAG_TH, "DHT11 read failed!");
-            return;
+            ESP_LOGW(TAG_TH, "DHT11 read failed!");
+            valid = false;
+            return false;
 
         }
 
         tempDHT11     = t;
         humidityDHT11 = h;
+        valid = true;
+        return true;
 
     }
 
@@ -140,12 +150,14 @@ public:
     float getTemperature() const { return tempDHT11;     }
     float getHumidity()    const { return humidityDHT11; }
     int   getLight()       const { return light;         }
+    bool  isValid()        const { return valid;         }
 
 private:
 
     float tempDHT11     = 0.0f;
     float humidityDHT11 = 0.0f;
     int   light         = 0;
+    bool  valid         = false;
 
 } sensor;
 
@@ -175,144 +187,220 @@ typedef enum : uint8_t
 //    SU  → TH : esp_data_err&sensors { UNIT_ERR, SENSOR_CK, EXT_TEMP_VAL }
 // ============================================================
 
+// ESP-NOW callbacks only enqueue events. Never delay or use LCD in the Wi-Fi task.
 class local {
 
 public:
 
     static local* instance;
 
-    static void onReceive(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len)
-    {
-        (void)recv_info;
-        if (instance) instance->onReceiveFinal(data, len);
+    // Creates the communication queue before ESP-NOW callbacks are registered.
+    bool begin() {
+
+        events = xQueueCreate(16, sizeof(net_event));
+        return events != nullptr;
+
     }
 
-    // IDF 5.x send callback
-    static void onSent(const esp_now_send_info_t* send_info,esp_now_send_status_t status)
-    {
-        if (instance) instance->onSentFinal(*send_info, status);
+    static void onReceive(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len) {
+
+        if (instance) {
+            instance->onReceiveFinal(recv_info, data, len);
+        }
+
     }
 
-    // receive handler
-    void onReceiveFinal(const uint8_t* data, int len) {
+    // IDF 5.5+ send callback accepts esp_now_send_info_t instead of a MAC pointer.
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 5, 0)
+    static void onSent(const esp_now_send_info_t* send_info, esp_now_send_status_t status) {
 
-        // Handle esp_data_state packet
-        if (len == (int)sizeof(esp_data_err_sensor)) {
+        (void)send_info;
+#else
+    static void onSent(const uint8_t* mac_addr, esp_now_send_status_t status) {
 
-                esp_data_err_sensor pkt;
-                memcpy(&pkt, data, sizeof(pkt));
+        (void)mac_addr;
+#endif
+        if (instance) {
+            instance->onSentFinal(status);
+        }
 
-                switch (pkt.UNIT_ERR) {
+    }
 
-                    case UNIT_CK:
-                        lcd.clear();
-                        lcd_row_sel(0);
-                        lcd.print("SU_CONNECTED");
-                        break;
-                    
-                    case MANUAL_OVERRIDE:
-                        // MAYBE SHOW ON SCREEN 
-                        break;
+    void onReceiveFinal(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len) {
 
-                    case ERR_WATCHDOG_RESET:
-                        lcd.clear();
-                        lcd_row_sel(0);
-                        lcd.print("RESTART_SU!");
-                        break;
+        if (!events || !recv_info || !recv_info->src_addr ||
+            memcmp(recv_info->src_addr, receiverMAC, sizeof(receiverMAC)) != 0) {
+            return;
+        }
 
-                    case ERR_BROWNOUT:
-                        lcd.clear();
-                        lcd_row_sel(0);
-                        lcd.print("DROP.VOLT_SU");
-                        break;
+        net_event event = {};
+        event.type = RX_INVALID;
 
-                    default:
-                        break;
+        if (data && len == (int)sizeof(esp_data_err_sensor)) {
+            event.type = RX_STATUS;
+            memcpy(&event.packet, data, sizeof(event.packet));
+        }
 
-                }
+        (void)xQueueSend(events, &event, 0);
 
-                if(pkt.SENSOR_CK == 1) {
+    }
 
-                    if(isfinite(pkt.EXT_TEMP_VAL)) {
-                        ext_temp = pkt.EXT_TEMP_VAL;
+    void onSentFinal(esp_now_send_status_t status) {
+
+        if (!events) {
+            return;
+        }
+
+        net_event event = {};
+        event.type = (status == ESP_NOW_SEND_SUCCESS) ? TX_SUCCESS : TX_FAILED;
+        (void)xQueueSend(events, &event, 0);
+
+    }
+
+    // public send (enqueue a desired boiler state; process() performs actual transmit)
+    void send(bool start) {
+
+        desired_command = start;
+        last_command = start;
+        queued_command = true;
+
+        if (!busy) {
+            retry_count = 0;
+            retry_after_ms = 0;
+        }
+
+    }
+
+    void process() {
+
+        const uint32_t now = static_cast<uint32_t>(esp_timer_get_time() / 1000ULL);
+        net_event event = {};
+
+        while (events && xQueueReceive(events, &event, 0) == pdTRUE) {
+
+            switch (event.type) {
+
+                case RX_STATUS:
+                    failed_receive = 0;
+                    status_received = true;
+                    last_rx_ms = now;
+                    relay_on = event.packet.RELAY_ON != 0;
+                    remote_manual = event.packet.MANUAL_ON != 0;
+
+                    if (event.packet.SENSOR_CK == 1 &&
+                        isfinite(event.packet.EXT_TEMP_VAL)) {
+                        ext_temp = event.packet.EXT_TEMP_VAL;
+                        external_valid = true;
                     } else {
-                        // Error in reading ext_sensor value, retry!
+                        external_valid = false;
+                        if (event.packet.SENSOR_CK == 9) {
+                            show_error(7);
+                        }
                     }
 
-                } else if(pkt.SENSOR_CK == 0) { 
-                    // DO NOTHING, Means the SU module dose not have an external sensor connected at boot or not intersted in reporting;
-                } else if(pkt.SENSOR_CK == 9) {
+                    switch (event.packet.UNIT_ERR) {
 
-                    lcd.clear();
-                    lcd_row_sel(0);
-                    lcd.print("EXT_TEMP_SENSOR");
-                    lcd_row_sel(1);
-                    lcd.print("REP/W_T_SENSOR");
+                        case UNIT_CK:
+                            break;
+                        case MANUAL_OVERRIDE:
+                            remote_manual = true;
+                            break;
+                        case ERR_WATCHDOG_RESET:
+                            show_error(3);
+                            break;
+                        case ERR_BROWNOUT:
+                            show_error(4);
+                            break;
+                        case ERR_REBOOTED:
+                            show_error(5);
+                            break;
+                        default:
+                            show_error(6);
+                            break;
 
-                }
+                    }
+                    break;
 
-            failed_receive = 0;
-            return;
+                case RX_INVALID:
+                    failed_receive++;
+                    show_error(2);
+                    break;
 
-        } else {
+                case TX_SUCCESS:
+                    busy = false;
+                    counter = 0;
+                    retry_count = 0;
+                    // A new state may have been queued during the previous transmission.
+                    break;
 
-            // Unknown / wrong-length packet / not responding correctly
-            if (failed_receive < 10) {
+                case TX_FAILED:
+                    busy = false;
+                    counter++;
+                    retry_count++;
 
-                failed_receive++;
+                    if (retry_count <= 10) {
+                        queued_command = true;
+                        retry_after_ms = now + 500;
+                    } else {
+                        queued_command = false;
+                        show_error(1);
+                    }
+                    break;
 
+            }
+
+        }
+
+        // A missing callback should not block communication forever.
+        if (busy && (uint32_t)(now - send_started_ms) >= 1500) {
+            busy = false;
+            retry_count++;
+            queued_command = retry_count <= 10;
+            retry_after_ms = now + 500;
+
+            if (!queued_command) {
+                show_error(1);
+            }
+        }
+
+        // Only one packet at a time; the 500 ms retry belongs here, NOT in callbacks.
+        if (!busy && queued_command &&
+            (int32_t)(now - retry_after_ms) >= 0) {
+
+            data_send_pkt.execute = desired_command;
+            esp_err_t result = esp_now_send(receiverMAC,
+                                            (const uint8_t*)&data_send_pkt,
+                                            sizeof(data_send_pkt));
+
+            if (result == ESP_OK) {
+                busy = true;
+                queued_command = false;
+                send_started_ms = now;
             } else {
-
-                send(false);
-
-                lcd.clear();
-                lcd_row_sel(0);
-                lcd.print("FAILED_EST_SU");
-                lcd_row_sel(1);
-                lcd.print("REBOOT_SU/TH_M");
-
-                esp_restart();
-
+                retry_count++;
+                retry_after_ms = now + 500;
+                if (retry_count > 10) {
+                    queued_command = false;
+                    show_error(1);
+                }
             }
 
         }
 
     }
 
-    // send-confirm handler
-    void onSentFinal(const esp_now_send_info_t, esp_now_send_status_t status) {
+    bool connected() const {
 
-        if (status == ESP_NOW_SEND_SUCCESS) {
-
-            counter = 0;
-
-        } else if (counter < 10) {
-
-            counter++;
-            send(last_command);
-
-        } else {
-
-            ESP_LOGE(TAG_TH, "ESP-NOW send retry limit — restarting");
-            counter = 0;
-            lcd.clear();
-            lcd_row_sel(0);
-            lcd.print("FAILED_TO_SU");
-            lcd_row_sel(1);
-            lcd.print("Maybe SU_OFF_D?");
-
-        }
+        uint32_t now = static_cast<uint32_t>(esp_timer_get_time() / 1000ULL);
+        return status_received && (uint32_t)(now - last_rx_ms) <= 35000;
 
     }
 
-    // public send 
-    void send(bool start) {
-
-        data_send_pkt.execute = start;
-        last_command = start;
-        esp_now_send(receiverMAC, (const uint8_t*)&data_send_pkt, sizeof(data_send_pkt));
-
-    }
+    bool actualRelayOn() const { return relay_on; }
+    bool remoteManualOn() const { return remote_manual; }
+    bool externalAvailable() const { return external_valid && connected(); }
+    int errorCode() const { return current_error; }
+    uint32_t errorTimeMs() const { return error_started_ms; }
 
 private:
 
@@ -321,14 +409,53 @@ private:
         bool execute;
     };
 
-    // Incoming: external temperature from Starting Unit /**(TODO — not implemented on SU yet)**/
+    // Incoming: external temperature and relay state from Starting Unit
+    // Appended two status bytes; old 6-byte packet is intentionally incompatible.
     struct [[gnu::packed]] esp_data_err_sensor {
         uint8_t UNIT_ERR;
         uint8_t SENSOR_CK;
         float   EXT_TEMP_VAL;
+        uint8_t RELAY_ON;
+        uint8_t MANUAL_ON;
     };
 
+    static_assert(sizeof(esp_data_send) == 1, "Unexpected command packet size");
+    static_assert(sizeof(esp_data_err_sensor) == 8, "Unexpected status packet size");
+
+    enum event_type : uint8_t {
+        RX_STATUS,
+        RX_INVALID,
+        TX_SUCCESS,
+        TX_FAILED
+    };
+
+    struct net_event {
+        event_type type;
+        esp_data_err_sensor packet;
+    };
+
+    void show_error(int code) {
+
+        current_error = code;
+        error_started_ms = static_cast<uint32_t>(esp_timer_get_time() / 1000ULL);
+
+    }
+
+    QueueHandle_t events = nullptr;
     esp_data_send data_send_pkt = {};
+    bool queued_command = false;
+    bool desired_command = false;
+    bool busy = false;
+    bool status_received = false;
+    bool external_valid = false;
+    bool relay_on = false;
+    bool remote_manual = false;
+    int retry_count = 0;
+    int current_error = 0;
+    uint32_t retry_after_ms = 0;
+    uint32_t send_started_ms = 0;
+    uint32_t last_rx_ms = 0;
+    uint32_t error_started_ms = 0;
 
 } command_now;
 
@@ -369,7 +496,9 @@ static void wifi_espnow_init() {
     esp_now_peer_info_t peer = {};
     memcpy(peer.peer_addr, receiverMAC, 6);
     peer.channel = 0;
-    peer.encrypt = true;
+    peer.ifidx = WIFI_IF_STA;
+    peer.encrypt = true; // AES128 encrypt
+    memcpy(peer.lmk, ESP_NOW_LMK, sizeof(peer.lmk));
     ESP_ERROR_CHECK(esp_now_add_peer(&peer));
 
 }

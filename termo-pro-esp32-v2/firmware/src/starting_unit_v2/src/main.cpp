@@ -20,6 +20,9 @@
 #include <string>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
+#include "esp_idf_version.h"
+#include "esp_timer.h"
 #include "esp_system.h"
 #include "esp_wifi.h"
 #include "esp_now.h"
@@ -34,6 +37,9 @@
 // ### TAG ####################################################################
 static const char* TAG = "LOG[SU]";
 
+// 16-byte ESP-NOW Local Master Key. MUST be identical on both boards.
+static const uint8_t ESP_NOW_LMK[16] = { 0xDE, 0x24, 0x64, 0x98, 0x81, 0x22, 0x9E, 0xC9, 0xC9, 0xAD, 0x66, 0x90, 0x04, 0x64, 0xE0, 0x48 };
+
 // ### PIN DEFINITIONS ########################################################
 static constexpr gpio_num_t PIN_TEMP_SENSE = GPIO_NUM_0;   // ADC input  (NTC);
 static constexpr gpio_num_t M_PIN_BTN_LED  = GPIO_NUM_3;   // manual_start_button LED control pin;
@@ -41,8 +47,8 @@ static constexpr gpio_num_t M_PIN_BTN      = GPIO_NUM_4;   // manual_start_butto
 static constexpr gpio_num_t PIN_LED_GREEN  = GPIO_NUM_5;   // ON LED;
 static constexpr gpio_num_t PIN_LED_RED    = GPIO_NUM_6;   // OFF LED;
 static constexpr gpio_num_t PIN_TRANSISTOR = GPIO_NUM_7;   // PN2222A base -> RELAY;
-int sensor_ck = 0;
-float sensor_temp = 0.0f;
+std::atomic<int> sensor_ck = 0;
+std::atomic<float> sensor_temp = 0.0f;
 
 /* ***- ESP-NOW PEER  (replace with real MAC before flashing!) -** */
 static uint8_t receiver_mac[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -51,6 +57,7 @@ static uint8_t receiver_mac[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 typedef enum : uint8_t {
 
     UNIT_CK            = 0,
+    MANUAL_OVERRIDE    = 1,
     
     // communication
     ERR_LEN_INVALID    = 10,
@@ -71,13 +78,37 @@ struct [[gnu::packed]] esp_data_sensor {
     uint8_t UNIT_ERR;
     uint8_t SENSOR_CK;
     float   EXT_TEMP_VAL;
+    uint8_t RELAY_ON;
+    uint8_t MANUAL_ON;
 };
+
+static_assert(sizeof(esp_data_receive) == 1, "Unexpected command packet size");
+static_assert(sizeof(esp_data_sensor) == 8, "Unexpected status packet size");
 
 // ### MODULE STATE ############################################################
 static std::atomic<bool> is_on      = false;
 static int           retry_counter  = 0;
 static uint8_t       last_error     = UNIT_CK;
-static esp_data_sensor data_sent    = {};
+std::atomic<bool> manual_ovveride = false;
+
+// Short Wi-Fi callbacks enqueue events; a normal FreeRTOS task handles GPIO / retries.
+enum su_event_type : uint8_t {
+    SU_COMMAND,
+    SU_RX_INVALID,
+    SU_TX_SUCCESS,
+    SU_TX_FAILURE
+};
+
+struct su_event {
+    su_event_type type;
+    bool boiler_command;
+};
+
+static QueueHandle_t su_event_queue = nullptr;
+static uint32_t error_retry_due_ms = 0;
+static bool error_retry_scheduled = false;
+static uint32_t last_thermostat_command_ms = 0;
+static bool thermostat_has_command = false;
 
 
 // DELAY
@@ -86,8 +117,6 @@ void delay(int d) {
 }
 
 // ### GPIO HELPERS ############################################################
-std::atomic<bool> manual_ovveride = false;
-
 static inline void set_load(bool on, int8_t arg)
 {
 
@@ -142,11 +171,14 @@ static void stop()
 // ### ESP-NOW SEND ############################################################
 static void send(uint8_t error, uint8_t sensor_ck, float ext_temp)
 {
-    data_sent.UNIT_ERR = error;
-    data_sent.SENSOR_CK = sensor_ck;
-    data_sent.EXT_TEMP_VAL = ext_temp;
+    esp_data_sensor packet = {};
+    packet.UNIT_ERR = error;
+    packet.SENSOR_CK = sensor_ck;
+    packet.EXT_TEMP_VAL = ext_temp;
+    packet.RELAY_ON = gpio_get_level(PIN_TRANSISTOR) ? 1 : 0;
+    packet.MANUAL_ON = manual_ovveride.load() ? 1 : 0;
 
-    esp_err_t ret = esp_now_send(receiver_mac, (const uint8_t*)&data_sent, sizeof(data_sent));
+    esp_err_t ret = esp_now_send(receiver_mac, (const uint8_t*)&packet, sizeof(packet));
     if (ret != ESP_OK) {
 
         ESP_LOGE(TAG, "esp_now_send failed: %s", esp_err_to_name(ret));
@@ -159,58 +191,127 @@ static void send(uint8_t error, uint8_t sensor_ck, float ext_temp)
 static void handle_error(uint8_t error)
 {
 
-
     last_error = error;
 
     if (retry_counter < 5) {
 
         retry_counter++;
-        vTaskDelay(pdMS_TO_TICKS(400));
-        send(error, 0, 0);
+        error_retry_due_ms = static_cast<uint32_t>(esp_timer_get_time() / 1000ULL) + 400;
+        error_retry_scheduled = true;
 
-    } else { retry_counter = 0; }
-
+    } else {
+        retry_counter = 0;
+        error_retry_scheduled = false;
+    }
 
 }
 
 // ### ESP-NOW CALLBACKS #######################################################
+// Callback work is limited to queueing. The Wi-Fi task must never sleep.
 
 // IDF 5.x receive callback signature
-static void on_receive(const esp_now_recv_info_t* recv_info, const uint8_t*data, int len)
+static void on_receive(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len)
 {
 
-    if (len != (int)sizeof(esp_data_receive)) {
-
-        handle_error(ERR_LEN_INVALID);
+    if (!su_event_queue || !recv_info || !recv_info->src_addr ||
+        memcmp(recv_info->src_addr, receiver_mac, sizeof(receiver_mac)) != 0) {
         return;
-
     }
 
-    esp_data_receive pkt;
-    memcpy(&pkt, data, sizeof(pkt));
+    su_event event = {};
+    event.type = SU_RX_INVALID;
 
-    if (pkt.execute) {
-
-        start();
-
-    } else {
-
-        stop();
-
+    if (data && len == (int)sizeof(esp_data_receive)) {
+        esp_data_receive pkt;
+        memcpy(&pkt, data, sizeof(pkt));
+        event.type = SU_COMMAND;
+        event.boiler_command = pkt.execute;
     }
+
+    (void)xQueueSend(su_event_queue, &event, 0);
 
 }
 
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 5, 0)
+static void on_sent(const esp_now_send_info_t* send_info, esp_now_send_status_t status)
+{
+    (void)send_info;
+#else
 static void on_sent(const uint8_t *mac_addr, esp_now_send_status_t status)
 {
+    (void)mac_addr;
+#endif
 
-    if (status == ESP_NOW_SEND_SUCCESS) {
+    if (!su_event_queue) {
+        return;
+    }
 
-        retry_counter = 0;
-        
-    } else {
+    su_event event = {};
+    event.type = (status == ESP_NOW_SEND_SUCCESS) ? SU_TX_SUCCESS : SU_TX_FAILURE;
+    (void)xQueueSend(su_event_queue, &event, 0);
 
-        handle_error(last_error);
+}
+
+static void link_worker(void *p)
+{
+    (void)p;
+    su_event event = {};
+
+    while (true) {
+
+        if (xQueueReceive(su_event_queue, &event, pdMS_TO_TICKS(50)) == pdTRUE) {
+
+            switch (event.type) {
+
+                case SU_COMMAND:
+                    last_thermostat_command_ms = static_cast<uint32_t>(esp_timer_get_time() / 1000ULL);
+                    thermostat_has_command = true;
+                    if (event.boiler_command) {
+                        start();
+                    } else {
+                        stop();
+                    }
+
+                    // Explicitly report ACTUAL relay and Starting Unit manual states.
+                    send(UNIT_CK, sensor_ck, sensor_temp);
+                    break;
+
+                case SU_RX_INVALID:
+                    handle_error(ERR_LEN_INVALID);
+                    break;
+
+                case SU_TX_SUCCESS:
+                    retry_counter = 0;
+                    break;
+
+                case SU_TX_FAILURE:
+                    handle_error(last_error);
+                    break;
+
+            }
+
+        }
+
+        uint32_t now = static_cast<uint32_t>(esp_timer_get_time() / 1000ULL);
+
+        // Safety timeout: loss of controller communication turns automatic heat OFF.
+        // Local Starting Unit manual override still has priority.
+        if (thermostat_has_command &&
+            (uint32_t)(now - last_thermostat_command_ms) >= 35000) {
+            thermostat_has_command = false;
+            is_on.store(false);
+            set_load(false, 0);
+            send(UNIT_CK, sensor_ck, sensor_temp);
+            ESP_LOGW(TAG, "Thermostat heartbeat lost: automatic relay OFF");
+        }
+
+        if (error_retry_scheduled &&
+            (int32_t)(now - error_retry_due_ms) >= 0) {
+
+            error_retry_scheduled = false;
+            send(last_error, sensor_ck, sensor_temp);
+
+        }
 
     }
 
@@ -306,46 +407,51 @@ static void wifi_espnow_init()
     esp_now_peer_info_t peer = {};
     memcpy(peer.peer_addr, receiver_mac, 6);
     peer.channel = 0;
+    peer.ifidx = WIFI_IF_STA;
     peer.encrypt = true; // AES128 encryption
+    memcpy(peer.lmk, ESP_NOW_LMK, sizeof(peer.lmk));
     ESP_ERROR_CHECK(esp_now_add_peer(&peer));
 
 }
 
 void manual_start(void *p) {
 
+    (void)p;
+    bool previous_pressed = false;
+
     while (true)
     {
 
-        if(gpio_get_level(M_PIN_BTN) == 0) {
+        bool pressed = gpio_get_level(M_PIN_BTN) == 0;
 
-            if(!manual_ovveride) {
+        // Edge detection prevents a long-held button from toggling repeatedly.
+        if (pressed && !previous_pressed) {
 
-                manual_ovveride = true;
+            if (!manual_ovveride.load()) {
+
+                manual_ovveride.store(true);
                 aux_button_led_on();
-                send(1, sensor_ck, sensor_temp);
-
-                if(!is_on.load())
-                    set_load(true, 1);
-                
-                delay(2000);
+                set_load(true, 1);
+                send(MANUAL_OVERRIDE, sensor_ck, sensor_temp);
 
             } else {
-                
-                manual_ovveride = false;
+
+                manual_ovveride.store(false);
                 aux_button_led_off();
 
-                if(!is_on.load())
-                    set_load(false, 1);
+                // Restore thermostat-requested relay state after manual override.
+                set_load(is_on.load(), 1);
+                send(UNIT_CK, sensor_ck, sensor_temp);
 
-                delay(2000);
             }
 
         }
 
-        delay(100);
+        previous_pressed = pressed;
+        delay(50);
 
     }
-    
+
 }
 
 // Applies the termistor ecuations and calibration;
@@ -429,7 +535,7 @@ void external_sensor(void *p)
             vTaskDelay(1);
         }
 
-        uint8_t sensor_ck = 1;
+        sensor_ck = 1;
 
         if (!read_ok) {
             // Sensor configured, failed reading: sends NAN to termostat
@@ -460,7 +566,7 @@ void external_sensor(void *p)
                     sensor_temp = NAN;
                     sensor_ck = 9;
                 } else {
-                    ESP_LOGI("EXT_SENSOR: ", "%.2f C", sensor_temp);
+                    ESP_LOGI("EXT_SENSOR: ", "%.2f C", sensor_temp.load());
                 }
             }
         }
@@ -478,7 +584,13 @@ extern "C" void app_main()
     aux_button_led_off();       // latch auxiliary LED-button off;
 
     // wifi
+    su_event_queue = xQueueCreate(16, sizeof(su_event));
+    if (!su_event_queue) {
+        ESP_LOGE(TAG, "ESP-NOW event queue creation failed");
+        esp_restart();
+    }
     wifi_espnow_init();
+    xTaskCreatePinnedToCore(link_worker, "SU_LINK", 4096, NULL, 12, NULL, 0);
 
     uint8_t boot_err = report_boot_status();
     

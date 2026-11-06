@@ -1,3 +1,4 @@
+#pragma once
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -21,8 +22,8 @@ static constexpr uint32_t   LEDC_FREQ_HZ     = 5000;
 #define LEDC_RESOLUTION     LEDC_TIMER_8_BIT   // 0-255
 
 // -------------------- Retry & reboot counters --------------------
-int  counter = 0;
-int  failed_receive = 0;
+extern int counter;
+extern int failed_receive;
 extern bool last_command;
 
 // -------------------- ESP-NOW peer MAC (Starting Unit) --------------------
@@ -35,6 +36,7 @@ extern int night_start;  // e.g. 21 (21:00)
 // -------------------- Soft-RTC shadow --------------------
 extern int hour;
 extern int minute;
+extern bool time_initialized;
 extern int day;    // weekday 1-7 (Mon=1, Sun=7)
 
 // -------------------- Program selector --------------------
@@ -194,10 +196,46 @@ extern auto_mode confort_mode;
 //  SEASONAL PROGRAMS  (START_TEMP / STOP_TEMP set at runtime)
 /*
 
-    TODO: ADV. PROGRAM SET TBD
+    START/STOP thresholds and one ON/OFF bit for every hour of the day
 
 */
-class prog_1 {
+class hourly_schedule {
+
+public:
+
+    // 24-bit mask: bit 0 = 00:00-00:59, bit 23 = 23:00-23:59.
+    // All 24 hours are enabled for new programs by default.
+    uint32_t allowed_hours = 0x00FFFFFFUL;
+
+    bool hour_enabled(int selected_hour) const {
+
+        if (selected_hour < 0 || selected_hour > 23) {
+            return false;
+        }
+
+        return (allowed_hours & (1UL << selected_hour)) != 0;
+
+    }
+
+    void set_hour_enabled(int selected_hour, bool enabled) {
+
+        if (selected_hour < 0 || selected_hour > 23) {
+            return;
+        }
+
+        if (enabled) {
+            allowed_hours |= (1UL << selected_hour);
+        } else {
+            allowed_hours &= ~(1UL << selected_hour);
+        }
+
+        allowed_hours &= 0x00FFFFFFUL;
+
+    }
+
+};
+
+class prog_1 : public hourly_schedule {
 public:
     
 
@@ -223,7 +261,7 @@ public:
 
 };
 
-class prog_2 {
+class prog_2 : public hourly_schedule {
 public:
     
 
@@ -249,7 +287,7 @@ public:
 
 };
 
-class prog_3 {
+class prog_3 : public hourly_schedule {
 public:
     
 
@@ -275,7 +313,7 @@ public:
 
 };
 
-class prog_4 {
+class prog_4 : public hourly_schedule {
 public:
     
 
