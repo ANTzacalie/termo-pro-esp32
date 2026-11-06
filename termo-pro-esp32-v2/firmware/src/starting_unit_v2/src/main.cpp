@@ -425,7 +425,7 @@ void manual_start(void *p) {
         bool pressed = gpio_get_level(M_PIN_BTN) == 0;
 
         // Edge detection prevents a long-held button from toggling repeatedly.
-        if (pressed && !previous_pressed) {
+        if (pressed && !previous_pressed) { // better than using more delays.....
 
             if (!manual_ovveride.load()) {
 
