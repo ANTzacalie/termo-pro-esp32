@@ -232,15 +232,9 @@ static void on_receive(const esp_now_recv_info_t* recv_info, const uint8_t* data
 
 }
 
-#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 5, 0)
 static void on_sent(const esp_now_send_info_t* send_info, esp_now_send_status_t status)
 {
     (void)send_info;
-#else
-static void on_sent(const uint8_t *mac_addr, esp_now_send_status_t status)
-{
-    (void)mac_addr;
-#endif
 
     if (!su_event_queue) {
         return;
