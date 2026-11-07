@@ -290,8 +290,7 @@ static void link_worker(void *p)
 
         // Safety timeout: loss of controller communication turns automatic heat OFF.
         // Local Starting Unit manual override still has priority.
-        if (thermostat_has_command &&
-            (uint32_t)(now - last_thermostat_command_ms) >= 35000) {
+        if (thermostat_has_command && (uint32_t)(now - last_thermostat_command_ms) >= 35000) {
             thermostat_has_command = false;
             is_on.store(false);
             set_load(false, 0);
@@ -299,8 +298,7 @@ static void link_worker(void *p)
             ESP_LOGW(TAG, "Thermostat heartbeat lost: automatic relay OFF");
         }
 
-        if (error_retry_scheduled &&
-            (int32_t)(now - error_retry_due_ms) >= 0) {
+        if (error_retry_scheduled && (int32_t)(now - error_retry_due_ms) >= 0) {
 
             error_retry_scheduled = false;
             send(last_error, sensor_ck, sensor_temp);
