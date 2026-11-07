@@ -236,17 +236,17 @@ public:
             return;
         }
 
-        nvs_set_i8(nvs_handle, "l_cmd", last_command ? 1 : 0);
+        nvs_set_i8  (nvs_handle, "l_cmd",   last_command ? 1 : 0);
         nvs_set_blob(nvs_handle, "rec_mac", receiverMAC, sizeof(receiverMAC));
-        nvs_set_i32(nvs_handle, "day_s", day_start);
-        nvs_set_i32(nvs_handle, "night_s", night_start);
-        nvs_set_i32(nvs_handle, "hour", hour);
-        nvs_set_i32(nvs_handle, "minute", minute);
-        nvs_set_i32(nvs_handle, "day", day);
-        nvs_set_i8(nvs_handle, "time_set", time_initialized ? 1 : 0);
-        nvs_set_i32(nvs_handle, "prg_ch", program_choice);
-        nvs_set_i32(nvs_handle, "ntc_r_d", confort_mode.ntc_room_day);
-        nvs_set_i32(nvs_handle, "ntc_r_n", confort_mode.ntc_room_night);
+        nvs_set_i32 (nvs_handle, "day_s",   day_start);
+        nvs_set_i32 (nvs_handle, "night_s", night_start);
+        nvs_set_i32 (nvs_handle, "hour",    hour);
+        nvs_set_i32 (nvs_handle, "minute",  minute);
+        nvs_set_i32 (nvs_handle, "day",     day);
+        nvs_set_i8  (nvs_handle, "time_set",time_initialized ? 1 : 0);
+        nvs_set_i32 (nvs_handle, "prg_ch",  program_choice);
+        nvs_set_i32 (nvs_handle, "ntc_r_d", confort_mode.ntc_room_day);
+        nvs_set_i32 (nvs_handle, "ntc_r_n", confort_mode.ntc_room_night);
 
         // Manual control and last heating command are NOT restored at boot.
         // Restart always begins with the boiler command OFF.
@@ -275,7 +275,7 @@ public:
             char start_key[12];
             char stop_key[12];
             snprintf(start_key, sizeof(start_key), "s_p%d", i);
-            snprintf(stop_key, sizeof(stop_key), "p_p%d", i);
+            snprintf(stop_key,  sizeof(stop_key),  "p_p%d", i);
 
             nvs_set_blob(nvs_handle, start_key, &s_temp, sizeof(s_temp));
             nvs_set_blob(nvs_handle, stop_key,  &p_temp, sizeof(p_temp));
@@ -319,11 +319,11 @@ private:
         get_integer("day", day);
         get_integer("prg_ch", program_choice);
 
-        day_start = (day_start >= 0 && day_start <= 23) ? day_start : 5;
-        night_start = (night_start >= 0 && night_start <= 23) ? night_start : 21;
-        hour = (hour >= 0 && hour <= 23) ? hour : 0;
-        minute = (minute >= 0 && minute <= 59) ? minute : 0;
-        day = (day >= 1 && day <= 7) ? day : 1;
+        day_start      = (day_start >= 0 && day_start <= 23) ? day_start : 5;
+        night_start    = (night_start >= 0 && night_start <= 23) ? night_start : 21;
+        hour           = (hour >= 0 && hour <= 23) ? hour : 0;
+        minute         = (minute >= 0 && minute <= 59) ? minute : 0;
+        day            = (day >= 1 && day <= 7) ? day : 1;
         program_choice = (program_choice >= 0 && program_choice <= 5) ? program_choice : 0;
 
         int8_t saved_clock_flag = 0;
@@ -334,23 +334,27 @@ private:
         // The existing automatic cool-down values use these original NVS keys.
         int cool_time = 0;
         get_integer("ntc_r_d", cool_time);
+
         confort_mode.ntc_room_day = cool_time >= 0 ? cool_time : 0;
         cool_time = 0;
+
         get_integer("ntc_r_n", cool_time);
         confort_mode.ntc_room_night = cool_time >= 0 ? cool_time : 0;
 
         // A MAC saved in NVS can override the compile-time MAC.
         uint8_t stored_mac[6] = {};
         size_t mac_size = sizeof(stored_mac);
-        if (nvs_get_blob(nvs_handle, "rec_mac", stored_mac, &mac_size) == ESP_OK &&
-            mac_size == sizeof(stored_mac)) {
+        if (nvs_get_blob(nvs_handle, "rec_mac", stored_mac, &mac_size) == ESP_OK && mac_size == sizeof(stored_mac)) {
+
             bool nonzero_mac = false;
             for (uint8_t octet : stored_mac) {
                 nonzero_mac |= (octet != 0);
             }
+
             if (nonzero_mac) {
                 memcpy(receiverMAC, stored_mac, sizeof(receiverMAC));
             }
+
         }
 
         for (int i = 1; i <= 5; i++) {
@@ -527,31 +531,31 @@ static button_input key_menu = { BUTTON_MENU_PIN };
 static button_input key_save = { BUTTON_SAVE_PIN };
 
 static screen_mode screen = SCREEN_MAIN;
-static int home_page = 0;
-static int menu_index = 0;
+static int home_page        = 0;
+static int menu_index       = 0;
 static int selected_program = 1;
-static int edit_field = 0;
-static int selected_hour = 0;
-static int draft_hour = 0;
-static int draft_minute = 0;
-static int draft_day = 1;
-static int draft_day_start = 5;
-static int draft_night_start = 21;
+static int edit_field       = 0;
+static int selected_hour    = 0;
+static int draft_hour       = 0;
+static int draft_minute     = 0;
+static int draft_day        = 1;
+static int draft_day_start  = 5;
+static int draft_night_start  = 21;
 static float draft_start_temp = 20.0f;
-static float draft_stop_temp = 23.0f;
-static uint32_t draft_hours = 0x00FFFFFFUL;
-static bool manual_heat = false;
-static bool screen_dirty = true;
+static float draft_stop_temp  = 23.0f;
+static uint32_t draft_hours   = 0x00FFFFFFUL;
+static bool manual_heat     = false;
+static bool screen_dirty    = true;
 static uint32_t last_button_ms = 0;
-static uint32_t last_draw_ms = 0;
-static uint32_t last_control_ms = 0;
+static uint32_t last_draw_ms   = 0;
+static uint32_t last_control_ms= 0;
 static uint32_t last_sensor_ms = 0;
-static uint32_t last_light_ms = 0;
+static uint32_t last_light_ms  = 0;
 static uint32_t last_command_refresh_ms = 0;
-static uint32_t last_network_error_ms = 0;
+static uint32_t last_network_error_ms   = 0;
 static bool dht_error_notified = false;
 static uint32_t alert_until_ms = 0;
-static char alert_text[17] = {};
+static char alert_text[17]     = {};
 
 static uint32_t time_ms() {
 
@@ -830,18 +834,24 @@ static void modify_program_temp(int change) {
     const float step = 0.5f * change;
 
     if (edit_field == 0) {
+
         draft_start_temp += step;
-        if (draft_start_temp < 5.0f) draft_start_temp = 5.0f;
+        if (draft_start_temp < 5.0f)  draft_start_temp = 5.0f;
         if (draft_start_temp > 34.5f) draft_start_temp = 34.5f;
+        
         if (draft_stop_temp < draft_start_temp + 0.5f) {
             draft_stop_temp = draft_start_temp + 0.5f;
         }
+
     } else if (edit_field == 1) {
+
         draft_stop_temp += step;
         if (draft_stop_temp < draft_start_temp + 0.5f) {
             draft_stop_temp = draft_start_temp + 0.5f;
         }
+
         if (draft_stop_temp > 35.0f) draft_stop_temp = 35.0f;
+
     }
 
 }
@@ -968,7 +978,7 @@ static void handle_short_button(int which) {
 
 static void scan_buttons(uint32_t now) {
 
-    uint8_t up = key_up.update(now);
+    uint8_t up   = key_up.update(now);
     uint8_t down = key_down.update(now);
     uint8_t menu = key_menu.update(now);
     uint8_t save = key_save.update(now);
@@ -983,10 +993,10 @@ static void scan_buttons(uint32_t now) {
         return;
     }
 
-    if (up == 1 || up == 3) handle_short_button(0);
+    if (up == 1 || up == 3)     handle_short_button(0);
     if (down == 1 || down == 3) handle_short_button(1);
-    if (menu == 1) handle_short_button(2);
-    if (save == 1) handle_short_button(3);
+    if (menu == 1)              handle_short_button(2);
+    if (save == 1)              handle_short_button(3);
 
     // Original prototype behavior: save edits after 10 seconds of inactivity.
     if ((uint32_t)(now - last_button_ms) >= 10000) {
@@ -1042,9 +1052,9 @@ static void draw_screen(uint32_t now) {
 
             if (home_page == 0) {
 
-                char temp_text[8] = "--.-";
+                char temp_text[8]     = "--.-";
                 char humidity_text[6] = "--";
-                char ext_text[8] = "--.-";
+                char ext_text[8]      = "--.-";
 
                 if (sensor.isValid()) {
                     snprintf(temp_text, sizeof(temp_text), "%4.1f", sensor.getTemperature());
@@ -1073,15 +1083,14 @@ static void draw_screen(uint32_t now) {
 
             } else {
 
-                const bool link_ok = local::instance && local::instance->connected();
+                const bool link_ok   = local::instance && local::instance->connected();
                 const bool su_manual = local::instance && local::instance->remoteManualOn();
-                const bool allowed = permitted_to_heat(program_choice, hour);
+                const bool allowed   = permitted_to_heat(program_choice, hour);
 
                 snprintf(top, sizeof(top), "LINK:%s SU-M:%d",
                          link_ok ? "OK " : "LOST", su_manual ? 1 : 0);
-                bool daytime = (day_start < night_start) ?
-                    (hour >= day_start && hour < night_start) :
-                    (hour >= day_start || hour < night_start);
+
+                bool daytime   = (day_start < night_start) ? (hour >= day_start && hour < night_start) : (hour >= day_start || hour < night_start);
                 char day_night = time_initialized ? (daytime ? 'D' : 'N') : '?';
                 snprintf(bottom, sizeof(bottom), "P%d H:%s %c C:%d",
                          program_choice, allowed ? "ON " : "OFF",
@@ -1157,13 +1166,13 @@ static void update_lcd_brightness(uint32_t now) {
     const int raw = sensor.getLight();
     uint32_t duty = 50;
 
-    if (raw >= ULTRA_H_BC) duty = 255;
-    else if (raw >= ULTRA_BC) duty = 230;
-    else if (raw >= HIGH_BC) duty = 205;
-    else if (raw >= INTER_NC) duty = 175;
-    else if (raw >= MEDIUM_BC) duty = 145;
-    else if (raw >= LOW_H_BC) duty = 115;
-    else if (raw >= LOW_BC) duty = 85;
+    if      (raw >= ULTRA_H_BC)  duty = 255;
+    else if (raw >= ULTRA_BC  )  duty = 230;
+    else if (raw >= HIGH_BC   )  duty = 205;
+    else if (raw >= INTER_NC  )  duty = 175;
+    else if (raw >= MEDIUM_BC )  duty = 145;
+    else if (raw >= LOW_H_BC  )  duty = 115;
+    else if (raw >= LOW_BC    )  duty = 85;
 
     sensor.setBrightness(duty);
 
@@ -1189,11 +1198,10 @@ static void update_heating_control(uint32_t now) {
 
         if (manual_control) {
             demand = manual_heat;
-        } else if (sensor.isValid() &&
-                   permitted_to_heat(program_choice, hour)) {
+        } else if (sensor.isValid() && permitted_to_heat(program_choice, hour)) {
 
             float start = 20.0f;
-            float stop = 23.0f;
+            float stop  = 23.0f;
             get_targets(program_choice, start, stop);
 
             demand = last_command;
@@ -1210,12 +1218,13 @@ static void update_heating_control(uint32_t now) {
 
     }
 
-    if (demand != last_command ||
-        (uint32_t)(now - last_command_refresh_ms) >= 10000) {
+    if (demand != last_command || (uint32_t)(now - last_command_refresh_ms) >= 10000) {
+
         if (local::instance) {
             local::instance->send(demand);
         }
         last_command_refresh_ms = now;
+
     }
 
 }
@@ -1223,19 +1232,19 @@ static void update_heating_control(uint32_t now) {
 static void process_interface(uint32_t now) {
 
     if (local::instance) {
+
         local::instance->process();
-        if (local::instance->errorCode() &&
-            local::instance->errorTimeMs() != last_network_error_ms) {
+        if (local::instance->errorCode() && local::instance->errorTimeMs() != last_network_error_ms) {
 
             last_network_error_ms = local::instance->errorTimeMs();
 
             switch (local::instance->errorCode()) {
-                case 1: notify_user("ESP-NOW SEND ERR"); break;
-                case 2: notify_user("ESP-NOW RX ERROR"); break;
+                case 1: notify_user("ESP-NOW SEND ERR");  break;
+                case 2: notify_user("ESP-NOW RX ERROR");  break;
                 case 3: notify_user("SU WATCHDOG RESET"); break;
-                case 4: notify_user("SU VOLTAGE DROP"); break;
-                case 5: notify_user("SU RESTARTED"); break;
-                case 6: notify_user("SU STATUS ERROR"); break;
+                case 4: notify_user("SU VOLTAGE DROP");   break;
+                case 5: notify_user("SU RESTARTED");      break;
+                case 6: notify_user("SU STATUS ERROR");   break;
                 case 7: notify_user("SU NTC SENSOR ERR"); break;
             }
 
@@ -1246,10 +1255,12 @@ static void process_interface(uint32_t now) {
 
         last_sensor_ms = now;
         if (!sensor.readTemperatureHumidity()) {
+
             if (!dht_error_notified) {
                 notify_user("DHT11 READ ERROR");
                 dht_error_notified = true;
             }
+
         } else {
             dht_error_notified = false;
         }
@@ -1278,8 +1289,7 @@ extern "C" void app_main() {
 
     // NVS must load the stored peer MAC before esp_now_add_peer() is called.
     esp_err_t nvs_result = nvs_flash_init();
-    if (nvs_result == ESP_ERR_NVS_NO_FREE_PAGES ||
-        nvs_result == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    if (nvs_result == ESP_ERR_NVS_NO_FREE_PAGES || nvs_result == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
         nvs_result = nvs_flash_init();
     }
@@ -1307,9 +1317,9 @@ extern "C" void app_main() {
 
     // NVS / preferences (already restored before peer registration)
 
-    // A software RTC cannot know how long power was off.
-    // Keep last saved hour/minute/day as editor defaults, but require confirmation
-    // before enabling scheduled P1-P4 heating after any restart.
+    /* - A software RTC cannot know how long power was off.
+       - Keep last saved hour/minute/day as editor defaults, but require confirmation
+       before enabling scheduled P1-P4 heating after any restart. */
     time_initialized = false;
 
     last_sensor_ms = time_ms() - 2500;

@@ -7,7 +7,6 @@
 #include "esp_timer.h"
 #include "esp_idf_version.h"
 #include <math.h>
-#include <stdio.h>
 #include <string.h>
 #include "esp_adc/adc_oneshot.h"
 #include "driver/gpio.h"
@@ -31,6 +30,7 @@
 static const char* TAG_TH = "LOG[TH]";
 
 // 16-byte ESP-NOW Local Master Key. MUST be identical on both boards.
+/*!!! WARNING, THIS IS TO BE USED ONLY FOR TESTING, FOR DEPLOYEMENT ALWAYS GENERATE A NEW ONE !!!*/
 static const uint8_t ESP_NOW_LMK[16] = { 0xDE, 0x24, 0x64, 0x98, 0x81, 0x22, 0x9E, 0xC9, 0xC9, 0xAD, 0x66, 0x90, 0x04, 0x64, 0xE0, 0x48 };
 
 // ============================================================
@@ -163,7 +163,7 @@ private:
 
 
 // ERROR CODES  (shared between both units — keep in sync with
-// the matching enum in main.cpp on the Starting Unit)
+// the matching enum in main.cpp on the Starting Unit
 typedef enum : uint8_t 
 {
 
@@ -210,16 +210,11 @@ public:
 
     }
 
-    // IDF 5.5+ send callback accepts esp_now_send_info_t instead of a MAC pointer.
-#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 5, 0)
+    // IDF 5.5+ logic
     static void onSent(const esp_now_send_info_t* send_info, esp_now_send_status_t status) {
 
         (void)send_info;
-#else
-    static void onSent(const uint8_t* mac_addr, esp_now_send_status_t status) {
 
-        (void)mac_addr;
-#endif
         if (instance) {
             instance->onSentFinal(status);
         }
@@ -228,17 +223,20 @@ public:
 
     void onReceiveFinal(const esp_now_recv_info_t* recv_info, const uint8_t* data, int len) {
 
-        if (!events || !recv_info || !recv_info->src_addr ||
-            memcmp(recv_info->src_addr, receiverMAC, sizeof(receiverMAC)) != 0) {
+        // memory check 
+        if (!events || !recv_info || !recv_info->src_addr || memcmp(recv_info->src_addr, receiverMAC, sizeof(receiverMAC)) != 0) {
             return;
         }
 
         net_event event = {};
         event.type = RX_INVALID;
 
+        // size check 
         if (data && len == (int)sizeof(esp_data_err_sensor)) {
+
             event.type = RX_STATUS;
             memcpy(&event.packet, data, sizeof(event.packet));
+
         }
 
         (void)xQueueSend(events, &event, 0);
@@ -261,8 +259,8 @@ public:
     void send(bool start) {
 
         desired_command = start;
-        last_command = start;
-        queued_command = true;
+        last_command    = start;
+        queued_command  = true;
 
         if (!busy) {
             retry_count = 0;
@@ -353,6 +351,7 @@ public:
 
         // A missing callback should not block communication forever.
         if (busy && (uint32_t)(now - send_started_ms) >= 1500) {
+
             busy = false;
             retry_count++;
             queued_command = retry_count <= 10;
@@ -364,13 +363,10 @@ public:
         }
 
         // Only one packet at a time; the 500 ms retry belongs here, NOT in callbacks.
-        if (!busy && queued_command &&
-            (int32_t)(now - retry_after_ms) >= 0) {
+        if (!busy && queued_command && (int32_t)(now - retry_after_ms) >= 0) {
 
             data_send_pkt.execute = desired_command;
-            esp_err_t result = esp_now_send(receiverMAC,
-                                            (const uint8_t*)&data_send_pkt,
-                                            sizeof(data_send_pkt));
+            esp_err_t result = esp_now_send(receiverMAC, (const uint8_t*)&data_send_pkt, sizeof(data_send_pkt));
 
             if (result == ESP_OK) {
                 busy = true;
@@ -396,11 +392,11 @@ public:
 
     }
 
-    bool actualRelayOn() const { return relay_on; }
-    bool remoteManualOn() const { return remote_manual; }
+    bool actualRelayOn()     const { return relay_on; }
+    bool remoteManualOn()    const { return remote_manual; }
     bool externalAvailable() const { return external_valid && connected(); }
-    int errorCode() const { return current_error; }
-    uint32_t errorTimeMs() const { return error_started_ms; }
+    int errorCode()          const { return current_error; }
+    uint32_t errorTimeMs()   const { return error_started_ms; }
 
 private:
 
@@ -443,19 +439,19 @@ private:
 
     QueueHandle_t events = nullptr;
     esp_data_send data_send_pkt = {};
-    bool queued_command = false;
+    bool queued_command  = false;
     bool desired_command = false;
-    bool busy = false;
+    bool busy            = false;
     bool status_received = false;
-    bool external_valid = false;
-    bool relay_on = false;
-    bool remote_manual = false;
-    int retry_count = 0;
-    int current_error = 0;
-    uint32_t retry_after_ms = 0;
+    bool external_valid  = false;
+    bool relay_on        = false;
+    bool remote_manual   = false;
+    int retry_count      = 0;
+    int current_error    = 0;
+    uint32_t retry_after_ms  = 0;
     uint32_t send_started_ms = 0;
-    uint32_t last_rx_ms = 0;
-    uint32_t error_started_ms = 0;
+    uint32_t last_rx_ms      = 0;
+    uint32_t error_started_ms= 0;
 
 } command_now;
 
